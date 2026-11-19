@@ -1,0 +1,2867 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Finite volume simulation of pressure, vacuum and temperature swing adsorption cycles in Python">
+      
+      
+        <meta name="author" content="Mohammad Yazdani">
+      
+      
+      
+        <link rel="prev" href="../boundaries/">
+      
+      
+        <link rel="next" href="../data/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Cycles, streams and acceleration - SwingPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cycles-and-streams" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SwingPy" class="md-header__button md-logo" aria-label="SwingPy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SwingPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cycles, streams and acceleration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mohammmadyazdani/swingpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SwingPy" class="md-nav__button md-logo" aria-label="SwingPy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SwingPy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mohammmadyazdani/swingpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem specifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The column model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/cycles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steps and cycles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas properties and adsorbents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Valves, layers, dead volume, IAST and TSA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs and figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem specifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Column model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../materials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas, adsorbent and column
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isotherms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Isotherms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../boundaries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boundary conditions and steps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cycles, streams and acceleration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cycles, streams and acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cycle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.CyclePerformance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CyclePerformance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.CycleRun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CycleRun
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cycle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle.key_component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        key_component
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle.evaluate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        evaluate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle.run_once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_once
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        streams
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="streams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamRecord
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StreamRecord">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord.pressure_at" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pressure_at
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord.mean_composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mean_composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord.at" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        at
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord.total_moles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        total_moles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.acceleration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        acceleration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="acceleration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.acceleration.SteffensenAccelerator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteffensenAccelerator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SteffensenAccelerator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.acceleration.SteffensenAccelerator.next_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        next_state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.acceleration.AndersonAccelerator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AndersonAccelerator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AndersonAccelerator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.acceleration.AndersonAccelerator.next_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        next_state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas properties, humidity and equation of state
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plotting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs, figures and reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../published/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validated against published work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cycle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.CyclePerformance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CyclePerformance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.CycleRun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CycleRun
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cycle
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle.key_component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        key_component
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle.evaluate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        evaluate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle.run_once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_once
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.cycle.Cycle.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        streams
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="streams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamRecord
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StreamRecord">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord.pressure_at" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pressure_at
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord.mean_composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mean_composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord.at" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        at
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.streams.StreamRecord.total_moles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        total_moles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.acceleration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        acceleration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="acceleration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.acceleration.SteffensenAccelerator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SteffensenAccelerator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SteffensenAccelerator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.acceleration.SteffensenAccelerator.next_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        next_state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.acceleration.AndersonAccelerator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AndersonAccelerator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AndersonAccelerator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.acceleration.AndersonAccelerator.next_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        next_state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cycles-and-streams">Cycles and streams<a class="headerlink" href="#cycles-and-streams" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.cycle" class="doc doc-heading">
+            <code>swingpy.cycle</code>
+
+
+<a href="#swingpy.cycle" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Cycles, cyclic steady state and key performance indicators.</p>
+<p>A cycle is a list of steps run one after the other on a single column; the
+state at the end of a step is the initial state of the next one. The key
+performance indicators are computed from the stream labels of the boundary
+conditions, so they work for any cycle: the purity and recovery of the
+<code>key_component</code> are taken in the stream labelled <code>product</code> against the
+streams labelled <code>feed</code>.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.cycle.CyclePerformance" class="doc doc-heading">
+            <code>CyclePerformance</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.cycle.CyclePerformance" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Key performance indicators of one cycle.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.purity">purity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Mole fraction of the key component in the product stream, %.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.recovery">recovery</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Key component in the product over key component fed, %.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.mass_balance_error">mass_balance_error</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>|in - out| / in of the key component over the cycle, %.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.specific_energy">specific_energy</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Machine work per tonne of key component in the product, kWh/t.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.productivity">productivity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Key component in the product per adsorbent volume and
+cycle time, mol/(m3 s). The adsorbent volume is (1 - eps) A L.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.cycle_time">cycle_time</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Sum of the actual step durations, s (steps with a stop
+condition may end early or be skipped).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.energy_by_step">energy_by_step</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Machine work of each step, J.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.streams">streams</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Net moles of each component in each labelled stream per
+cycle, positive out of the column.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.heat_by_step">heat_by_step</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Heat supplied to the column through its wall in each
+step, J (negative when the column is cooled).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.gas_heating_by_step">gas_heating_by_step</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Heat needed in each step to bring the gas that
+enters from <code>Cycle.gas_supply_temperature</code> up to its inlet
+temperature (a hot purge or regeneration gas), J.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.thermal_energy">thermal_energy</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Heat supplied over the cycle, through the wall in the
+heating steps and to hot inlet gas, per tonne of key component in
+the product, GJ/t; the main energy demand of temperature swing
+cycles.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.residual">residual</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Normalized residual error of Subraveti, Karimi and Gazzani
+(2026, eq 2): over the steps, the largest 100 x sum of squares of
+the change of the dimensionless profiles at the end of the step
+from the previous cycle; filled in by <code>Cycle.run</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CyclePerformance.profile_change">profile_change</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Largest change of the column profiles over the cycle
+(dimensionless, see <code>ColumnModel.profile_change</code>); filled in by
+<code>Cycle.run</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.cycle.CycleRun" class="doc doc-heading">
+            <code>CycleRun</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.cycle.CycleRun" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Result of <code>Cycle.run</code>.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CycleRun.results">results</span></code></td>
+            <td>
+                  <code><span title="list">list</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Step results of the last cycle.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CycleRun.performance">performance</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="CyclePerformance
+
+
+  
+      dataclass
+   (swingpy.cycle.CyclePerformance)" href="#swingpy.cycle.CyclePerformance">CyclePerformance</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>KPIs of the last cycle.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CycleRun.history">history</span></code></td>
+            <td>
+                  <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="CyclePerformance
+
+
+  
+      dataclass
+   (swingpy.cycle.CyclePerformance)" href="#swingpy.cycle.CyclePerformance">CyclePerformance</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>KPIs of every cycle.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CycleRun.converged">converged</span></code></td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether cyclic steady state was reached.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.cycle.CycleRun.recent">recent</span></code></td>
+            <td>
+                  <code><span title="list">list</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Step results of the last few cycles (oldest first), kept for
+plots of the approach to steady state; see <code>Cycle.run</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.cycle.Cycle" class="doc doc-heading">
+            <code>Cycle</code>
+
+
+<a href="#swingpy.cycle.Cycle" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>A sequence of steps and the definition of what it produces.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>steps</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The steps, in order.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>key_component</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Component whose purity and recovery are reported, for example "CO2".</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>product_stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label of the product stream.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;product&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>feed_stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label of the feed stream(s).</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;feed&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.cycle.Cycle.key_component" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">key_component</span> <span class="o">=</span> <span class="n">key_component</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#swingpy.cycle.Cycle.key_component" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Gas entering hotter than this has to be heated: its heat counts in the thermal energy.</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.cycle.Cycle.evaluate" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">evaluate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span></code>
+
+<a href="#swingpy.cycle.Cycle.evaluate" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>KPIs of one cycle from the step results.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.cycle.Cycle.run_once" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run_once</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_output</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">record_points</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+<a href="#swingpy.cycle.Cycle.run_once" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Simulate the steps once and return the list of StepResult.</p>
+<p><code>buffers</code> holds the recorded streams (name to StreamRecord). Steps
+that read a record get it before they run, and outlets with a
+<code>record_as</code> name store their stream after they run, so a record
+made in one cycle is still available to steps earlier in the next
+cycle (for example the heavy reflux tank).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.cycle.Cycle.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span> <span class="n">max_cycles</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">consecutive</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">report_every</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">keep_cycles</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">'both'</span><span class="p">,</span> <span class="n">profile_tolerance</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">accelerate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">acceleration_memory</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">acceleration_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">acceleration_every</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">acceleration_stop</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">residual_tolerance</span><span class="o">=</span><span class="mf">1e-05</span><span class="p">,</span> <span class="n">acceleration_max_jump</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span></code>
+
+<a href="#swingpy.cycle.Cycle.run" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Repeat the cycle until cyclic steady state.</p>
+<p>Two tests of steady state are available, both checked over
+<code>consecutive</code> cycles in a row:</p>
+<div class="highlight"><pre><span></span><code>"mass_balance"  the key component mass balance error over a cycle
+                is below ``tolerance`` (%), the usual criterion in
+                the literature
+"profiles"      no profile of the column changes by more than
+                ``profile_tolerance`` over a cycle (dimensionless)
+"both"          both of the above (default)
+"residual"      the normalized residual error (eq 2 of Subraveti,
+                Karimi and Gazzani 2026, ``CyclePerformance.residual``)
+                is below ``residual_tolerance`` and the mass
+                balance error below ``tolerance``, the criterion
+                of that paper (use with ``consecutive=1``)
+</code></pre></div>
+<p>The mass balance alone can be met while the column is still slowly
+warming or loading, so "both" is the safer choice; use
+"mass_balance" to apply only the usual mass balance rule.</p>
+<p>Acceleration (see <code>swingpy.acceleration</code>) starts some cycles from
+an extrapolated state instead of the end of the last cycle:</p>
+<div class="highlight"><pre><span></span><code>accelerate="graves_morris"   or another vector Steffensen method of
+                             ``acceleration.STEFFENSEN_METHODS``
+                             (Subraveti, Karimi and Gazzani 2026):
+                             ``acceleration_start`` plain cycles
+                             (3 by default), then an extrapolation
+                             every ``acceleration_every`` cycles
+                             until the residual is below
+                             ``acceleration_stop``; an extrapolation
+                             that jumps more than
+                             ``acceleration_max_jump`` times the last
+                             cycle's change is discarded
+accelerate=True or "anderson"  Anderson mixing of the last
+                             ``acceleration_memory`` cycles, after
+                             ``acceleration_start`` (5 by default)
+</code></pre></div>
+<p>The KPIs and the
+steady state tests are still those of simulated cycles. The step
+results of the last <code>keep_cycles</code> cycles are kept in
+<code>CycleRun.recent</code>.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.streams" class="doc doc-heading">
+            <code>swingpy.streams</code>
+
+
+<a href="#swingpy.streams" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Recorded gas streams that couple one step of a cycle to another.</p>
+<p>In a multi-bed plant the effluent of one column feeds another one at the
+same time: the raffinate of the adsorption step pressurizes a column (light
+product pressurization) or purges it (light reflux), and part of the
+extract is sent back to the feed end (heavy reflux). SwingPy simulates a
+single column, so such a stream is recorded while one step runs and played
+back when the receiving step runs (the single-bed or "unibed" approach).
+Records are replayed interval by interval, conserving the recorded moles.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.streams.StreamRecord" class="doc doc-heading">
+            <code>StreamRecord</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.streams.StreamRecord" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Time history of a gas stream leaving a column end.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.streams.StreamRecord.time">time</span></code></td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Time from the start of the source step, s.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.streams.StreamRecord.molar_flow">molar_flow</span></code></td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Total molar flow, mol/s (positive).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.streams.StreamRecord.mole_fractions">mole_fractions</span></code></td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Composition, shape (n_components, len(time)).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.streams.StreamRecord.temperature">temperature</span></code></td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>K.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.streams.StreamRecord.pressure">pressure</span></code></td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Face pressure, bar (used when another step needs the
+pressure history of this one, for example a valve venting into it).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.streams.StreamRecord.cumulative">cumulative</span></code></td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Moles of each component that have left since the start
+of the step, at each time, exactly as the model integrated them
+(shape components x times). When given, <code>total_moles</code> uses it
+rather than integrating the sampled flow, which misses or
+exaggerates sharp transients such as the first instants of an
+evacuation.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.streams.StreamRecord.pressure_at" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pressure_at</span><span class="p">(</span><span class="n">time_s</span><span class="p">)</span></code>
+
+<a href="#swingpy.streams.StreamRecord.pressure_at" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Face pressure at a time, bar (held at the ends of the record).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.streams.StreamRecord.mean_composition" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">mean_composition</span><span class="p">()</span></code>
+
+<a href="#swingpy.streams.StreamRecord.mean_composition" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Flow-weighted mean composition of the stream.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.streams.StreamRecord.at" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">at</span><span class="p">(</span><span class="n">time_s</span><span class="p">)</span></code>
+
+<a href="#swingpy.streams.StreamRecord.at" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Molar flow (mol/s), composition and temperature at a time; zero flow outside the record.</p>
+<p>With <code>cumulative</code> the flow is the mean over the sampling interval
+that contains the time (moles that left in the interval over its
+length), so that a replay returns exactly the recorded moles even
+when the source step starts with a sharp transient (a pressure
+equalization) that the sampled flow cannot resolve. Without it the
+sampled flow and composition are interpolated linearly.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.streams.StreamRecord.total_moles" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">total_moles</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#swingpy.streams.StreamRecord.total_moles" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Moles of each component between two times, mol.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.acceleration" class="doc doc-heading">
+            <code>swingpy.acceleration</code>
+
+
+<a href="#swingpy.acceleration" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Faster approach to cyclic steady state by vector acceleration of the cycle map.</p>
+<p>Two families are available:</p>
+<ul>
+<li><code>SteffensenAccelerator</code>: the vector extensions of Steffensen's method
+  compared for adsorption cycles by Subraveti, Karimi and Gazzani, Ind. Eng.
+  Chem. Res. 65 (2026) 9656, https://doi.org/10.1021/acs.iecr.6c00407
+  (Table 1), with their schedule: plain cycles first, then an extrapolation
+  every few cycles, and plain cycles only once the residual is small. Their
+  best method overall is Graves-Morris.</li>
+<li><code>AndersonAccelerator</code>: Anderson mixing of the last few cycles.</li>
+</ul>
+<p>Anderson acceleration:</p>
+<p>One cycle maps the state of the column at its start to the state at its
+end, s -&gt; F(s); cyclic steady state is the fixed point s = F(s). Repeating
+the cycle converges linearly, and slow modes (a column that keeps warming
+or loading a little each cycle) can take hundreds of cycles. Anderson
+acceleration combines the last few iterates to extrapolate towards the
+fixed point: with residuals g_k = F(s_k) - s_k it finds the weights that
+minimise the norm of their combination and moves to the same combination
+of the F(s_k).</p>
+<p>Safeguards: the extrapolated state is projected back into the physical
+range (mole fractions between 0 and 1, positive pressures, loadings and
+temperatures), and whenever a step makes the residual grow markedly the
+history is dropped and a plain cycle follows. The performance indicators and the
+steady state tests are always those of a simulated cycle, never of an
+extrapolated state.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.acceleration.SteffensenAccelerator" class="doc doc-heading">
+            <code>SteffensenAccelerator</code>
+
+
+<a href="#swingpy.acceleration.SteffensenAccelerator" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Vector Steffensen extrapolation of the cycle map (Subraveti, Karimi and
+Gazzani 2026).</p>
+<p>The schedule is that of the paper: <code>start</code> plain cycles, an
+extrapolation at the next one, then an extrapolation after every
+<code>every</code> plain cycles; once the residual of a cycle falls below
+<code>stop_residual</code> no further extrapolation is made, so the last cycles
+to steady state are plain ones. Each extrapolation uses the last two
+plain cycles: D -&gt; F(D) -&gt; F(F(D)).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>model</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The ColumnModel (for the layout of the state).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>method</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A key of <code>STEFFENSEN_METHODS</code> ("graves_morris" by default,
+the best method of the paper).</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;graves_morris&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>start</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Plain cycles before the first extrapolation (3 in the paper).</p>
+              </div>
+            </td>
+            <td>
+                  <code>3</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>every</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Plain cycles between two extrapolations (3 in the paper, at
+least 2).</p>
+              </div>
+            </td>
+            <td>
+                  <code>3</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stop_residual</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Residual (<code>Cycle.residual</code>) below which no more
+extrapolations are made (1e-4 in the paper).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.0001</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_jump</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Safeguard, not in the paper: an extrapolation that moves
+the state more than <code>max_jump</code> times the change over the last
+plain cycle (|new - F(D)| &gt; max_jump |u|) is discarded and the
+plain cycle kept. The scalar parameter of every variant is a
+ratio of inner products whose denominator can pass through zero
+(for Zienkiewicz-Lohner v.w): on the zeolite 13X VSA case one
+extrapolation had lambda = -1980, a jump of 1900 |u|, and the
+next cycle could not be integrated. A slow mode with a
+contraction factor a needs a jump of about 1 / (1 - a), so the
+default 100 keeps modes down to a = 0.99.</p>
+              </div>
+            </td>
+            <td>
+                  <code>100.0</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.acceleration.SteffensenAccelerator.next_state" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">next_state</span><span class="p">(</span><span class="n">state_in</span><span class="p">,</span> <span class="n">state_out</span><span class="p">,</span> <span class="n">residual</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span></code>
+
+<a href="#swingpy.acceleration.SteffensenAccelerator.next_state" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The state to start the next cycle from, given one cycle from <code>state_in</code> to <code>state_out</code>.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.acceleration.AndersonAccelerator" class="doc doc-heading">
+            <code>AndersonAccelerator</code>
+
+
+<a href="#swingpy.acceleration.AndersonAccelerator" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Anderson mixing for the cycle map of one ColumnModel.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>model</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The ColumnModel (for the layout of the state).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>memory</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of previous cycles combined (3 to 6 is typical).</p>
+              </div>
+            </td>
+            <td>
+                  <code>5</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>start</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Plain cycles before the first extrapolation (lets the fast
+transients die out).</p>
+              </div>
+            </td>
+            <td>
+                  <code>5</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>damping</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Fraction of the extrapolated step taken (1 = full step).</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>growth</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The history is dropped when the residual grows by more than
+this factor after an extrapolation (the residual of a cycle map
+is not monotonic, so a small growth is tolerated).</p>
+              </div>
+            </td>
+            <td>
+                  <code>2.0</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.acceleration.AndersonAccelerator.next_state" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">next_state</span><span class="p">(</span><span class="n">state_in</span><span class="p">,</span> <span class="n">state_out</span><span class="p">,</span> <span class="n">residual</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#swingpy.acceleration.AndersonAccelerator.next_state" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The state to start the next cycle from, given one cycle from <code>state_in</code> to <code>state_out</code>.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Mohammad Yazdani · MIT License
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

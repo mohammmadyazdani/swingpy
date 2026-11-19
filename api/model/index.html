@@ -1,0 +1,3155 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Finite volume simulation of pressure, vacuum and temperature swing adsorption cycles in Python">
+      
+      
+        <meta name="author" content="Mohammad Yazdani">
+      
+      
+      
+        <link rel="prev" href="../specification/">
+      
+      
+        <link rel="next" href="../materials/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Column model - SwingPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#column-model" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SwingPy" class="md-header__button md-logo" aria-label="SwingPy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SwingPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Column model
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mohammmadyazdani/swingpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SwingPy" class="md-nav__button md-logo" aria-label="SwingPy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SwingPy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mohammmadyazdani/swingpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem specifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The column model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/cycles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steps and cycles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas properties and adsorbents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Valves, layers, dead volume, IAST and TSA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs and figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem specifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Column model
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Column model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.Cell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.StepResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.StepTooStiff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepTooStiff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ColumnModel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnModel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.qs0_volumetric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        qs0_volumetric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.peclet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        peclet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.heat_peclet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heat_peclet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.pi_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pi_3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.n_shells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        n_shells
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.full_composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        full_composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.unpack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unpack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.initial_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        initial_state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.velocity_from_gradient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        velocity_from_gradient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.end_inertial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        end_inertial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.pressure_for_velocity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pressure_for_velocity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.velocity_for_pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        velocity_for_pressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.danckwerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        danckwerts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.molar_inflow_face" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        molar_inflow_face
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.rhs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rhs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.simulate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        simulate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.moles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        moles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.work_joule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        work_joule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.enthalpy_joule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enthalpy_joule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.component_inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        component_inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.enthalpy_inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enthalpy_inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.wall_heat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wall_heat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.heat_of_adsorption_released" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heat_of_adsorption_released
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.end_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        end_history
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.outflow_record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        outflow_record
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.profile_change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        profile_change
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.schemes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        schemes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="schemes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.schemes.SCHEMES" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SCHEMES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.schemes.reconstruct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reconstruct
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.schemes.upwind_faces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        upwind_faces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../materials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas, adsorbent and column
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isotherms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Isotherms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../boundaries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boundary conditions and steps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cycles, streams and acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas properties, humidity and equation of state
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plotting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs, figures and reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../published/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validated against published work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.Cell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.StepResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepResult
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.StepTooStiff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StepTooStiff
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ColumnModel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ColumnModel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.qs0_volumetric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        qs0_volumetric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.peclet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        peclet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.heat_peclet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heat_peclet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.pi_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pi_3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.n_shells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        n_shells
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.full_composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        full_composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.unpack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unpack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.initial_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        initial_state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.velocity_from_gradient" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        velocity_from_gradient
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.end_inertial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        end_inertial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.pressure_for_velocity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pressure_for_velocity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.velocity_for_pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        velocity_for_pressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.danckwerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        danckwerts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.molar_inflow_face" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        molar_inflow_face
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.rhs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rhs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.simulate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        simulate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.moles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        moles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.work_joule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        work_joule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.enthalpy_joule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enthalpy_joule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.component_inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        component_inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.enthalpy_inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enthalpy_inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.wall_heat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wall_heat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.heat_of_adsorption_released" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heat_of_adsorption_released
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.end_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        end_history
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.outflow_record" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        outflow_record
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.model.ColumnModel.profile_change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        profile_change
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.schemes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        schemes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="schemes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.schemes.SCHEMES" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SCHEMES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.schemes.reconstruct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reconstruct
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.schemes.upwind_faces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        upwind_faces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="column-model">Column model<a class="headerlink" href="#column-model" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.model" class="doc doc-heading">
+            <code>swingpy.model</code>
+
+
+<a href="#swingpy.model" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Finite volume model of a nonisothermal, nonisobaric adsorption column.</p>
+<p>The column is described by a one-dimensional, axially dispersed plug flow
+model of an ideal gas mixture with any number of components, linear driving
+force uptake, a bed energy balance with heat of adsorption and heat loss to
+the wall, a wall energy balance, and Darcy or Ergun pressure drop. The
+equations are written in dimensionless, conservative form and solved on N
+equal cells.</p>
+<p>Scaling. Pressure is divided by a reference pressure P0, temperature by T0,
+velocity by v0, length by the column length L, time by L / v0 and loadings
+by a reference loading q_s0. With L = 1 m and v0 = 1 m/s the dimensionless
+time equals time in seconds.</p>
+<p>State vector. For n components the state holds, in this order:</p>
+<div class="highlight"><pre><span></span><code>y          n - 1 independent mole fractions, N values each
+P          pressure, N values
+x          n loadings, N values each
+T          bed temperature, N values
+T_wall     wall temperature, N values
+bookkeeping  running integrals at both ends: n component fluxes,
+             the enthalpy flux and the machine work, per end
+</code></pre></div>
+<p>The bookkeeping integrals make purity, recovery, energy and balance errors
+as accurate as the time integration itself.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.model.Cell" class="doc doc-heading">
+            <code>Cell</code>
+
+
+<a href="#swingpy.model.Cell" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="typing.NamedTuple">NamedTuple</span></code></p>
+
+
+
+        <p>Dimensionless state of the cell next to a column end, handed to boundary conditions.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.model.StepResult" class="doc doc-heading">
+            <code>StepResult</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.model.StepResult" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Outcome of one integrated step.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.model.StepResult.step">step</span></code></td>
+            <td>
+                  <code><span title="object">object</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The step that was simulated.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.model.StepResult.time">time</span></code></td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Output times from the start of the step, s.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.model.StepResult.states">states</span></code></td>
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>State vectors at those times, shape (state size, len(time)).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.model.StepResult.moles_in">moles_in</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>For each end ("feed", "product"), the moles of each
+component that entered the column (negative when they left).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.model.StepResult.enthalpy_in">enthalpy_in</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>For each end, the gas enthalpy that entered, J.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.model.StepResult.work">work</span></code></td>
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>For each end, the compressor or vacuum pump work, J.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.model.StepTooStiff" class="doc doc-heading">
+            <code>StepTooStiff</code>
+
+
+<a href="#swingpy.model.StepTooStiff" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="RuntimeError">RuntimeError</span></code></p>
+
+
+
+        <p>A step needed more right hand side evaluations than allowed, with the LSODA fallback switched off.</p>
+
+
+
+
+
+
+
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.model.ColumnModel" class="doc doc-heading">
+            <code>ColumnModel</code>
+
+
+<a href="#swingpy.model.ColumnModel" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Discretized column ready to simulate cycle steps.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>column</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Geometry and thermal properties (<code>Column</code>).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>adsorbent</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Adsorbent, isotherm and kinetics (<code>Adsorbent</code>).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>gas</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Gas components and properties (<code>GasMixture</code>).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>n_cells</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of finite volumes.</p>
+              </div>
+            </td>
+            <td>
+                  <code>30</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>scheme</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Face reconstruction, one of "uds", "van_leer", "superbee", "weno".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;weno&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>reference_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>P0 in bar, usually the highest pressure of the cycle.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>reference_temperature</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>T0 in K, usually the feed temperature.</p>
+              </div>
+            </td>
+            <td>
+                  <code>298.15</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>reference_velocity</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>v0 in m/s, usually the feed velocity. It also
+sets the axial dispersion coefficient, D_L = 0.7 D_m + 0.5 v0 d_p.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>reference_loading</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>q_s0 in mol/kg. Only scales the loadings; by
+default the largest total saturation capacity of the isotherm.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>backend</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>"auto" (numba when installed, numpy otherwise), "numba" or
+"numpy". Both solve the same equations; numba is several times
+faster and worth installing for cyclic steady state runs.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;auto&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>axial_dispersion</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Axial dispersion coefficient D_L in m2/s, to use
+the value of a particular correlation; by default
+D_L = 0.7 D_m + 0.5 v0 d_p.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.model.ColumnModel.qs0_volumetric" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">qs0_volumetric</span> <span class="o">=</span> <span class="n">reference_loading</span> <span class="o">*</span> <span class="n">adsorbent</span><span class="o">.</span><span class="n">density</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#swingpy.model.ColumnModel.qs0_volumetric" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Bed voidage and particle size of every cell and face. They are uniform except in a layered bed. The velocity v
+is the superficial velocity divided by the column voidage eps (eps_ref), so the end faces convert flows as in a
+uniform bed; a cell of voidage eps_j accumulates gas in proportion to eps_j, so its flux divergences are scaled
+by eps_ref/eps_j.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.model.ColumnModel.peclet" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">peclet</span> <span class="o">=</span> <span class="n">reference_velocity</span> <span class="o">*</span> <span class="n">column</span><span class="o">.</span><span class="n">length</span> <span class="o">/</span> <span class="n">dispersion</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#swingpy.model.ColumnModel.peclet" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Without axial conduction the heat Peclet number is infinite: an inlet face takes the inlet temperature.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.model.ColumnModel.heat_peclet" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">heat_peclet</span> <span class="o">=</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">reference_velocity</span> <span class="o">*</span> <span class="n">column</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">c0</span> <span class="o">*</span> <span class="n">gas</span><span class="o">.</span><span class="n">heat_capacity</span> <span class="o">/</span> <span class="n">column</span><span class="o">.</span><span class="n">axial_thermal_conductivity</span> <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">axial_thermal_conductivity</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#swingpy.model.ColumnModel.heat_peclet" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Coupling of the solid uptake to the gas balances.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.model.ColumnModel.pi_3" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pi_3</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">column</span><span class="o">.</span><span class="n">outer_radius</span> <span class="o">*</span> <span class="n">column</span><span class="o">.</span><span class="n">outer_heat_transfer</span> <span class="o">/</span> <span class="n">wall_ring</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_scale</span> <span class="o">/</span> <span class="n">wall_capacity</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#swingpy.model.ColumnModel.pi_3" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Ratio of axial conduction to gas enthalpy convection at the ends.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.model.ColumnModel.n_shells" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">n_shells</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#swingpy.model.ColumnModel.n_shells" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Shells per particle when particle diffusion is resolved, zero otherwise.</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.full_composition" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">full_composition</span><span class="p">(</span><span class="n">independent</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.full_composition" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>All n mole fractions from the n - 1 independent ones.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.unpack" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">unpack</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.unpack" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Split a state vector into its named parts (views, not copies).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.initial_state" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">initial_state</span><span class="p">(</span><span class="n">pressure</span><span class="p">,</span> <span class="n">composition</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.initial_state" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Column filled with a uniform gas and the solid in equilibrium with it.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>bar.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Mole fractions (dict or sequence).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>temperature</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>K, the reference temperature by default.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.velocity_from_gradient" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">velocity_from_gradient</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">inertial</span><span class="p">,</span> <span class="n">darcy</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.velocity_from_gradient" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Velocity from g = -dP/dZ. Darcy: v = darcy_group g. Ergun:
+g = v / darcy_group + inertial v|v|, solved in a form that stays
+accurate when the inertial term vanishes.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.end_inertial" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">end_inertial</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.end_inertial" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Inertial coefficient at one end face (zero for Darcy's law).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.pressure_for_velocity" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">pressure_for_velocity</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.pressure_for_velocity" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Face pressure that drives a given velocity through half a cell.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.velocity_for_pressure" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">velocity_for_pressure</span><span class="p">(</span><span class="n">face_pressure</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.velocity_for_pressure" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Velocity through half a cell for a given face pressure.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.danckwerts" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">danckwerts</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">y_in</span><span class="p">,</span> <span class="n">t_in</span><span class="p">,</span> <span class="n">inflow_speed</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.danckwerts" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Face composition and temperature of an inlet (Danckwerts conditions):
+f = (f_cell + f_in a) / (1 + a) with a = v Pe dZ / 2. With no inflow
+this reduces to the zero gradient condition.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.molar_inflow_face" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">molar_inflow_face</span><span class="p">(</span><span class="n">molar_flow</span><span class="p">,</span> <span class="n">y_full</span><span class="p">,</span> <span class="n">temperature_k</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.molar_inflow_face" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Face state of an inlet with an imposed molar flow (mol/s), used by
+recorded and tank streams. The velocity is v = G T / P with G the
+dimensionless molar flux, and the face pressure must drive that
+velocity through half a cell. For Darcy's law the two conditions give
+a quadratic in the face pressure, solved exactly; the Ergun term is
+added by a few fixed-point iterations.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.rhs" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rhs</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.rhs" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Time derivative of the state vector during <code>step</code>.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.simulate" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">simulate</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">n_output</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-05</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-07</span><span class="p">,</span> <span class="n">max_evaluations</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.simulate" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Integrate one step from its start to <code>step.duration</code>, or until its
+<code>stop</code> condition is met.</p>
+<p>The bookkeeping integrals are reset at the start, so the returned
+flows and work belong to this step only. A step whose stop condition
+already holds is skipped and returns a zero-length result.</p>
+<p>The stiff BDF solver is used first. The upwind side of each face
+follows the local velocity, so the right hand side is not smooth
+where the velocity changes sign; in a step whose gas is nearly at
+rest over part of the column (a blowdown or evacuation of a short,
+very permeable bed) Newton's method then keeps failing and BDF can
+take hundreds of thousands of evaluations. After <code>max_evaluations</code>
+right hand side evaluations the step is restarted with LSODA, which
+switches between non-stiff and stiff methods and handles this far
+better (a 2 s blowdown of a 1 cm direct air capture bed: 81 000
+evaluations with BDF, 11 500 with LSODA). <code>max_evaluations=None</code>
+keeps BDF however long it takes. With <code>fallback=False</code> the step
+raises <code>StepTooStiff</code> instead of switching to LSODA (used to discard
+an extrapolated cycle start that turns out to be hard to integrate).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.moles" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">moles</span><span class="p">(</span><span class="n">integral</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.moles" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Dimensionless flux integral to moles: eps A L P0 / (R T0).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.work_joule" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">work_joule</span><span class="p">(</span><span class="n">integral</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.work_joule" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Dimensionless work integral to joules: eps A v0 P0 (L / v0).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.enthalpy_joule" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">enthalpy_joule</span><span class="p">(</span><span class="n">integral</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.enthalpy_joule" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Dimensionless enthalpy integral to joules: eps A (Cpg / R) P0 L.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.component_inventory" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">component_inventory</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.component_inventory" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Moles of each component held in the column (gas, dead volumes and solid).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.enthalpy_inventory" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">enthalpy_inventory</span><span class="p">(</span><span class="n">state</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.enthalpy_inventory" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Enthalpy held in the column (solid, adsorbed phase and gas, from 0 K), J.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.wall_heat" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">wall_heat</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">positive_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.wall_heat" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Heat supplied to the column from its surroundings through the wall
+during a step, J (negative when the column loses heat), from the
+outer heat transfer coefficient and the wall temperatures over time.
+In a temperature swing cycle the surroundings are a heating or
+cooling jacket, set per step with <code>Step(ambient_temperature=...)</code>.</p>
+<p>With <code>positive_only=True</code> only the heat flowing into the column
+counts, the integral of max(0, Q_in) over time: heat removed by the
+cooling fluid is not credited back.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.heat_of_adsorption_released" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">heat_of_adsorption_released</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">final_state</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.heat_of_adsorption_released" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Heat released by adsorption between two states, J.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.end_history" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">end_history</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">'product'</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.end_history" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Velocity (m/s), pressure (bar), mole fractions and temperature (K) at
+one end face over the output times of a step, for plots.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.outflow_record" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">outflow_record</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.outflow_record" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Record of the gas leaving one end during a step (molar flow in mol/s,
+composition, temperature), to be replayed by a later step.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.model.ColumnModel.profile_change" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">profile_change</span><span class="p">(</span><span class="n">previous_state</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span></code>
+
+<a href="#swingpy.model.ColumnModel.profile_change" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Largest change of any profile (y, P, x, T, T_wall) between two states,
+in dimensionless units, where every profile is of order one: 1e-3
+means about 0.3 K at T0 = 300 K, or 0.1 % of the reference pressure.
+Used as a cyclic steady state test on the column itself.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.schemes" class="doc doc-heading">
+            <code>swingpy.schemes</code>
+
+
+<a href="#swingpy.schemes" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Face reconstruction schemes of the finite volume method.</p>
+<p>A finite volume needs the value of each transported quantity at the faces
+between cells. The schemes below compute it from the cell averages on the
+upwind side: first order upwind, two flux-limited TVD schemes and WENO.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="swingpy.schemes.SCHEMES" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">SCHEMES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'uds'</span><span class="p">,</span> <span class="s1">'van_leer'</span><span class="p">,</span> <span class="s1">'superbee'</span><span class="p">,</span> <span class="s1">'weno'</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#swingpy.schemes.SCHEMES" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Names accepted by <code>reconstruct</code>.</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="swingpy.schemes.reconstruct" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">reconstruct</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="n">left_ghost</span><span class="p">,</span> <span class="n">scheme</span><span class="o">=</span><span class="s1">'weno'</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span></code>
+
+<a href="#swingpy.schemes.reconstruct" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Values at the interior faces for flow in the +Z direction.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>cells</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Cell averages, array of shape (..., N). Leading dimensions
+(for example one row per component) are reconstructed independently.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>left_ghost</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Value of a fictitious cell before the first one, from the
+half-cell approximation f_0 = 2 f_1/2 - f_1, shape (...,).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>scheme</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>"uds", "van_leer", "superbee" or "weno".</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;weno&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>delta</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Small number that keeps the smoothness ratios finite.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1e-10</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Array of shape (..., N - 1) with the values at faces 1+1/2 ... N-1/2.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="swingpy.schemes.upwind_faces" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">upwind_faces</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="n">feed_face</span><span class="p">,</span> <span class="n">product_face</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">scheme</span><span class="p">)</span></code>
+
+<a href="#swingpy.schemes.upwind_faces" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Interior face values reconstructed from the upwind side.</p>
+<p>For flow towards Z = 0 the column is read backwards, reconstructed with
+the same function and turned around again ("ends interchanged").</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Mohammad Yazdani · MIT License
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
