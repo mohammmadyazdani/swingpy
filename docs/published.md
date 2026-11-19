@@ -1,0 +1,27 @@
+# Validated against published work
+
+SwingPy is checked against the simulations and experiments of the studies below. Every comparison uses only the data each article reports, nothing is fitted, and the result is stated plainly, including where the agreement is partial or absent. The author is grateful to all of these authors for publishing their models and data in enough detail to be reproduced.
+
+![Purity and recovery predicted by SwingPy against the published values](figures/Published%20comparison.png)
+
+*Purity and recovery predicted by SwingPy against the values each study reports, for the 45 operating points that give both (the article's model where it has one, the experiment for Dantas et al.). The grey band is ±3 points. The points outside it are the cases listed below as partial or not reproduced.*
+
+| Study | What is compared | Outcome |
+|---|---|---|
+| R. Haghpanah, A. Majumder, R. Nilam, A. Rajendran, S. Farooq, I. A. Karimi, M. Amanullah, *Ind. Eng. Chem. Res.* 52 (2013) 4249, [doi:10.1021/ie302658y](https://doi.org/10.1021/ie302658y) | breakthrough of CO<sub>2</sub> on zeolite 13X, balance errors, accuracy of the discretization schemes, four-step VSA | breakthrough reproduced closely (CO<sub>2</sub> front at 535 s against about 520 s, balances closed to 10<sup>−4</sup> %); cycle trends reproduced, KPIs within about 10 % |
+| R. Haghpanah, R. Nilam, A. Rajendran, S. Farooq, I. A. Karimi, *AIChE J.* 59 (2013) 4735, [doi:10.1002/aic.14192](https://doi.org/10.1002/aic.14192) | basic, light product pressurization and pressure equalization cycles | purity and recovery within 2 to 3 points at five operating points; the six-step cycle with light and heavy reflux is not reproduced |
+| S. G. Subraveti, S. Roussanaly, R. Anantharaman, L. Riboldi, A. Rajendran, *Sep. Purif. Technol.* 256 (2021) 117832, [doi:10.1016/j.seppur.2020.117832](https://doi.org/10.1016/j.seppur.2020.117832) | three adsorbents: cycle, plant, column schedule and capture cost | purity and recovery within 1.5 points; capture cost of the published designs within 1.5 % (the plant, schedule and cost modules are not part of this release) |
+| S. G. Subraveti, PhD thesis, University of Alberta (2021), Chapter 4 | isothermal three- and four-step cycles on IISERP MOF2 | partly: recovery within 1.7 points, purity 1.8 to 2.6 points lower |
+| S. Krishnamurthy, V. R. Rao, S. Guntuka, P. Sharratt, R. Haghpanah, A. Rajendran, M. Amanullah, I. A. Karimi, S. Farooq, *AIChE J.* 60 (2014) 1830, [doi:10.1002/aic.14435](https://doi.org/10.1002/aic.14435) | pilot plant VSA on zeolite 13X | five runs within 1.2 points of purity and 0.7 of recovery; one partly; the two blowdown pressure runs not reproduced |
+| T. T. T. Nguyen, G. K. H. Shimizu, A. Rajendran, *Chem. Eng. J.* 452 (2023) 139550, [doi:10.1016/j.cej.2022.139550](https://doi.org/10.1016/j.cej.2022.139550) | VSA experiments on structured CALF-20 | experiments II to V reproduced; VI to X partly (trends right, purity high) |
+| V. Balasubramaniam and co-authors with A. Rajendran, *Chem. Eng. J.* 485 (2024) 149568, [doi:10.1016/j.cej.2024.149568](https://doi.org/10.1016/j.cej.2024.149568) | direct air capture by TVSA on an amine sorbent | productivity within 2 % and specific energy within 4.5 % |
+| S. G. Subraveti, K. Karimi, M. Gazzani, *Ind. Eng. Chem. Res.* 65 (2026) 9656, [doi:10.1021/acs.iecr.6c00407](https://doi.org/10.1021/acs.iecr.6c00407); S. G. Subraveti, K. Karimi, M. Gazzani, R. Anantharaman, *Syst. Control Trans.* 3 (2024) 215 | vector acceleration of the approach to cyclic steady state | steady states reproduced; numbers of cycles reproduced for the VSA test case |
+| S. G. Subraveti, R. Anantharaman, ChemRxiv (2025), [doi:10.26434/chemrxiv-2025-q70cw-v2](https://doi.org/10.26434/chemrxiv-2025-q70cw-v2) | three-step VTSA for methane enrichment | every indicator within 0.7 points |
+| L. Joss, M. Gazzani, M. Mazzotti, *Chem. Eng. Sci.* 158 (2017) 381, [doi:10.1016/j.ces.2016.10.013](https://doi.org/10.1016/j.ces.2016.10.013), with the isotherms of Hefti et al. (2015) | temperature swing with indirect heating | recovery agrees; purity 3.5 points lower; heat and productivity within 7 % |
+| N. Casas, J. Schell, R. Pini, M. Mazzotti, *Adsorption* 18 (2012) 143, [doi:10.1007/s10450-012-9389-z](https://doi.org/10.1007/s10450-012-9389-z) | 24 breakthroughs of CO<sub>2</sub>/H<sub>2</sub> at 5 to 35 bar | all trends reproduced; breakthrough times within about 9 % on average |
+| A. M. Ribeiro, C. A. Grande, F. V. S. Lopes, J. M. Loureiro, A. E. Rodrigues, *Chem. Eng. Sci.* 63 (2008) 5258, [doi:10.1016/j.ces.2008.07.017](https://doi.org/10.1016/j.ces.2008.07.017) | layered bed hydrogen PSA | purity reproduced; recovery 12 points low |
+| F. V. S. Lopes, C. A. Grande, A. E. Rodrigues, *Fuel* 93 (2012) 510, [doi:10.1016/j.fuel.2011.07.005](https://doi.org/10.1016/j.fuel.2011.07.005) | fast-cycling VPSA for hydrogen purification | recovery within 0.7 points and productivity within 2 %; purity in trend only |
+| T. L. P. Dantas and co-authors, *Chem. Eng. J.* 172 (2011) 698, [doi:10.1016/j.cej.2011.06.037](https://doi.org/10.1016/j.cej.2011.06.037) | laboratory Skarstrom cycle | trends reproduced; magnitudes not (purity 7 to 13 points high) |
+
+The model is also checked against exact solutions: the uptake of a single particle (J. Crank, *The Mathematics of Diffusion*, 1975), within 0.5 %, and the breakthrough of a linear column with diffusion in the particles (D. M. Ruthven, *Principles of Adsorption and Adsorption Processes*, 1984), within 0.16 %.
+

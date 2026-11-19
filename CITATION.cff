@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use SwingPy, please cite it as below."
+title: "SwingPy: simulation of pressure, vacuum and temperature swing adsorption cycles"
+type: software
+version: 1.0.0
+license: MIT
+authors:
+  - family-names: "Yazdani"
+    given-names: "Mohammad"
+    orcid: "https://orcid.org/0009-0007-4661-957X"
+repository-code: "https://github.com/mohammmadyazdani/swingpy"
+keywords:
+  - adsorption
+  - pressure swing adsorption
+  - carbon capture
+  - process simulation

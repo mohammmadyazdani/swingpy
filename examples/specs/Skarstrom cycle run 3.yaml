@@ -1,0 +1,152 @@
+# Two-bed Skarstrom cycle, CO2/N2 on zeolite 13X, run 3.
+# Parameters of Dantas et al., Chem. Eng. J. 172 (2011) 698, https://doi.org/10.1016/j.cej.2011.06.037
+# (particle diameter not reported there: 2 mm).
+version: 1
+components:
+- CO2
+- N2
+gas:
+  equation_of_state: ideal
+  molar_masses:
+    CO2: 0.04401 kg/mol
+    N2: 0.028014 kg/mol
+  heat_capacity: 29.5 J/(mol K)
+  viscosity: 1.9e-05 Pa s
+  molecular_diffusivity: 1.4e-05 m2/s
+  adiabatic_constant: 1.4
+adsorbent:
+  name: Zeolite 13X (Dantas et al. 2011)
+  particle_density: 1940.0 kg/m3
+  particle_radius: 0.001 m
+  particle_voidage: 0.37
+  tortuosity: 2.2
+  heat_capacity: 920.0 J/(kg K)
+  adsorbed_phase_heat_capacity: 0.0 J/(mol K)
+  heat_of_adsorption:
+    CO2: 29380.0 J/mol
+    N2: 17190.0 J/mol
+  isotherm:
+    model: toth
+    CO2:
+      qs: 5.09 mol/kg
+      b0: 0.0004305 1/bar
+      dU: -29380.0 J/mol
+      t: 0.429
+      reference_temperature: 298.15 K
+    N2:
+      qs: 3.08 mol/kg
+      b0: 8.82e-05 1/bar
+      dU: -17190.0 J/mol
+      t: 0.869
+      reference_temperature: 298.15 K
+    competitive: false
+  kinetics:
+    model: constant_ldf
+    rates:
+      CO2: 0.292 1/s
+      N2: 8.868325390501507 1/s
+bed:
+  length: 0.83 m
+  inner_radius: 0.0105 m
+  outer_radius: 0.014600000000000002 m
+  voidage: 0.62
+  pressure_drop: ergun
+  axial_thermal_conductivity: 0.46999587928466774 W/(m K)
+  include_pore_gas: false
+  wall:
+    density: 8238.0 kg/m3
+    heat_capacity: 500.0 J/(kg K)
+    thermal_conductivity: 13.4 W/(m K)
+  heat_transfer:
+    inner: 18.0 W/(m2 K)
+    outer: 8.0 W/(m2 K)
+    ambient_temperature: 373.15 K
+  dead_volume:
+    feed: 0.0 m3
+    product: 0.0 m3
+model:
+  cells: 30
+  scheme: weno
+  backend: auto
+  reference:
+    pressure: 1.3 bar
+    temperature: 373.15 K
+    velocity: 0.24790231947684027 m/s
+  axial_dispersion: 0.0006995152227026467 m2/s
+cycle:
+  key_component: CO2
+  product_stream: product
+  feed_stream: feed
+  steps:
+  - name: PRES
+    duration: 20.0 s
+    feed_end:
+      type: flow_inlet
+      molar_flow: 0.00223074863924333 mol/s
+      supply_pressure: none
+      efficiency: 0.72
+      label: nitrogen
+      stream: stream_1
+      max_pressure: 1.3 bar
+    product_end:
+      type: closed
+  - name: FEED
+    duration: 120.0 s
+    feed_end:
+      type: flow_inlet
+      molar_flow: 0.00223074863924333 mol/s
+      supply_pressure: none
+      efficiency: 0.72
+      label: feed
+      stream: stream_2
+    product_end:
+      type: outlet
+      pressure: 1.3 bar
+      label: raffinate
+      discharge_pressure: none
+      efficiency: 0.72
+      check_valve: false
+  - name: BLOW
+    duration: 70.0 s
+    feed_end:
+      type: outlet
+      pressure: 0.1 bar
+      label: product
+      discharge_pressure: none
+      efficiency: 0.72
+      check_valve: false
+    product_end:
+      type: closed
+  - name: PURG
+    duration: 50.0 s
+    feed_end:
+      type: outlet
+      pressure: 0.1 bar
+      label: product
+      discharge_pressure: none
+      efficiency: 0.72
+      check_valve: false
+    product_end:
+      type: flow_inlet
+      molar_flow: 0.00037179143987388835 mol/s
+      supply_pressure: none
+      efficiency: 0.72
+      label: nitrogen
+      stream: stream_1
+initial:
+  pressure: 0.1 bar
+  temperature: 373.15 K
+  composition:
+    CO2: 0.0
+    N2: 1.0
+streams:
+  stream_1:
+    composition:
+      CO2: 0.0
+      N2: 1.0
+    temperature: 373.15 K
+  stream_2:
+    composition:
+      CO2: 0.15
+      N2: 0.85
+    temperature: 373.15 K

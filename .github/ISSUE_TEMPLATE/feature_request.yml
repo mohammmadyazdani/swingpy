@@ -1,0 +1,16 @@
+name: Feature or validation case
+description: Suggest a new capability, or a published study to compare SwingPy with
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you would like
+      description: The capability or the comparison, and what it would be used for.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: The article, book or data set behind it (authors, journal, year, DOI), if there is one.

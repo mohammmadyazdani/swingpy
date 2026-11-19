@@ -1,0 +1,101 @@
+{
+  "reference_temperature": 298.15,
+  "units": {
+    "molar_mass": "kg/mol",
+    "heat_capacity": "J/(mol K), ideal gas at 298.15 K",
+    "viscosity": "Pa s at 298.15 K and 1 bar",
+    "diffusion_volume": "Fuller atomic diffusion volume, -"
+  },
+  "gases": {
+    "CO2": {
+      "molar_mass": 0.04401,
+      "heat_capacity": 37.12,
+      "viscosity": 1.49e-05,
+      "diffusion_volume": 26.7,
+      "critical_temperature": 304.128,
+      "critical_pressure": 73.773,
+      "acentric_factor": 0.2239
+    },
+    "N2": {
+      "molar_mass": 0.028014,
+      "heat_capacity": 29.12,
+      "viscosity": 1.78e-05,
+      "diffusion_volume": 18.5,
+      "critical_temperature": 126.192,
+      "critical_pressure": 33.958,
+      "acentric_factor": 0.0372
+    },
+    "O2": {
+      "molar_mass": 0.031999,
+      "heat_capacity": 29.38,
+      "viscosity": 2.06e-05,
+      "diffusion_volume": 16.3,
+      "critical_temperature": 154.599,
+      "critical_pressure": 50.4641,
+      "acentric_factor": 0.0222
+    },
+    "Ar": {
+      "molar_mass": 0.039948,
+      "heat_capacity": 20.79,
+      "viscosity": 2.26e-05,
+      "diffusion_volume": 16.2,
+      "critical_temperature": 150.687,
+      "critical_pressure": 48.63,
+      "acentric_factor": -0.0022
+    },
+    "H2O": {
+      "molar_mass": 0.018015,
+      "heat_capacity": 33.58,
+      "viscosity": 9.9e-06,
+      "diffusion_volume": 13.1,
+      "critical_temperature": 647.096,
+      "critical_pressure": 220.64,
+      "acentric_factor": 0.3443
+    },
+    "H2": {
+      "molar_mass": 0.002016,
+      "heat_capacity": 28.84,
+      "viscosity": 8.9e-06,
+      "diffusion_volume": 6.12,
+      "critical_temperature": 33.144,
+      "critical_pressure": 12.9636,
+      "acentric_factor": -0.219
+    },
+    "CH4": {
+      "molar_mass": 0.016043,
+      "heat_capacity": 35.69,
+      "viscosity": 1.1e-05,
+      "diffusion_volume": 25.14,
+      "critical_temperature": 190.564,
+      "critical_pressure": 45.992,
+      "acentric_factor": 0.0114
+    },
+    "CO": {
+      "molar_mass": 0.02801,
+      "heat_capacity": 29.14,
+      "viscosity": 1.77e-05,
+      "diffusion_volume": 18.0,
+      "critical_temperature": 132.86,
+      "critical_pressure": 34.9819,
+      "acentric_factor": 0.0497
+    },
+    "He": {
+      "molar_mass": 0.0040026,
+      "heat_capacity": 20.786,
+      "viscosity": 1.99e-05,
+      "diffusion_volume": 2.67,
+      "critical_temperature": 5.195,
+      "critical_pressure": 2.2832,
+      "acentric_factor": -0.3835
+    }
+  },
+  "sources": {
+    "molar_mass": "IUPAC standard atomic weights",
+    "heat_capacity": "NIST Chemistry WebBook, ideal-gas heat capacity at 298.15 K (Chase, NIST-JANAF Thermochemical Tables, 1998)",
+    "viscosity": "NIST Chemistry WebBook, thermophysical properties of fluid systems, 298.15 K and 1 bar",
+    "diffusion_volume": "Fuller, Ensley and Giddings, Ind. Eng. Chem. 61 (1969) 37, as tabulated in Poling, Prausnitz and O'Connell, The Properties of Gases and Liquids, 5th ed. (2001), Table 11-1",
+    "critical_temperature": "reference equations of state as implemented in CoolProp 8.0.0 (Bell, Wronski, Quoilin and Lemort, Ind. Eng. Chem. Res. 53 (2014) 2498), the critical points used by NIST REFPROP",
+    "critical_pressure": "reference equations of state as implemented in CoolProp 8.0.0 (Bell, Wronski, Quoilin and Lemort, Ind. Eng. Chem. Res. 53 (2014) 2498), the critical points used by NIST REFPROP",
+    "acentric_factor": "reference equations of state as implemented in CoolProp 8.0.0 (Bell, Wronski, Quoilin and Lemort, Ind. Eng. Chem. Res. 53 (2014) 2498), the critical points used by NIST REFPROP"
+  }
+}

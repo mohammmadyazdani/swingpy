@@ -1,0 +1,344 @@
+{
+  "zeolite-13x": {
+    "description": "Zeolite 13X beads, CO2/N2, competitive dual-site Langmuir",
+    "components": [
+      "CO2",
+      "N2"
+    ],
+    "isotherm": {
+      "type": "DualSiteLangmuir",
+      "qsb": [
+        3.09,
+        5.84
+      ],
+      "qsd": [
+        2.54,
+        0.0
+      ],
+      "b0": [
+        8.65e-07,
+        2.5e-06
+      ],
+      "d0": [
+        2.63e-08,
+        0.0
+      ],
+      "dUb": [
+        -36641.21,
+        -15800.0
+      ],
+      "dUd": [
+        -35690.66,
+        0.0
+      ]
+    },
+    "heat_of_adsorption": [
+      36641.21,
+      15800.0
+    ],
+    "density": 1130.0,
+    "particle_radius": 0.001,
+    "particle_voidage": 0.35,
+    "tortuosity": 3.0,
+    "heat_capacity": 1070.0,
+    "adsorbed_phase_heat_capacity": 30.7,
+    "sources": {
+      "references": [
+        {
+          "citation": "R. Haghpanah, A. Majumder, R. Nilam, A. Rajendran, S. Farooq, I. A. Karimi, M. Amanullah. Multiobjective optimization of a four-step adsorption process for postcombustion CO2 capture via finite volume simulation. Ind. Eng. Chem. Res. 52 (2013) 4249-4265",
+          "doi": "10.1021/ie302658y"
+        }
+      ],
+      "assumptions": []
+    }
+  },
+  "utsa-16": {
+    "description": "UTSA-16 metal-organic framework pellets, CO2/N2, dual-site Langmuir",
+    "components": [
+      "CO2",
+      "N2"
+    ],
+    "isotherm": {
+      "type": "DualSiteLangmuir",
+      "qsb": [
+        4.08,
+        1.33
+      ],
+      "qsd": [
+        1.29,
+        1.77
+      ],
+      "b0": [
+        2.52e-07,
+        9.17e-05
+      ],
+      "d0": [
+        1.75e-09,
+        9.42e-09
+      ],
+      "dUb": [
+        -32800.0,
+        -7500.0
+      ],
+      "dUd": [
+        -35040.0,
+        -27760.0
+      ]
+    },
+    "heat_of_adsorption": [
+      32800.0,
+      7500.0
+    ],
+    "density": 1171.0,
+    "particle_radius": 0.00075,
+    "particle_voidage": 0.35,
+    "tortuosity": 3.0,
+    "heat_capacity": 1070.0,
+    "adsorbed_phase_heat_capacity": 30.7,
+    "sources": {
+      "references": [
+        {
+          "citation": "V. S. Subraveti, S. Roussanaly, R. Anantharaman, L. Riboldi, A. Rajendran. Techno-economic assessment of optimised vacuum swing adsorption for post-combustion CO2 capture from steam-methane reformer flue gas. Sep. Purif. Technol. 256 (2021) 117832",
+          "doi": "10.1016/j.seppur.2020.117832"
+        }
+      ],
+      "assumptions": []
+    }
+  },
+  "iiserp-mof2": {
+    "description": "IISERP MOF2 metal-organic framework pellets, CO2/N2, dual-site Langmuir",
+    "components": [
+      "CO2",
+      "N2"
+    ],
+    "isotherm": {
+      "type": "DualSiteLangmuir",
+      "qsb": [
+        3.29,
+        3.29
+      ],
+      "qsd": [
+        1.89,
+        1.89
+      ],
+      "b0": [
+        9.39e-08,
+        2.55e-07
+      ],
+      "d0": [
+        5.23e-07,
+        2.55e-07
+      ],
+      "dUb": [
+        -31135.0,
+        -11890.0
+      ],
+      "dUd": [
+        -31135.0,
+        -11890.0
+      ]
+    },
+    "heat_of_adsorption": [
+      31135.0,
+      11890.0
+    ],
+    "density": 937.7,
+    "particle_radius": 0.00075,
+    "particle_voidage": 0.35,
+    "tortuosity": 3.0,
+    "heat_capacity": 1070.0,
+    "adsorbed_phase_heat_capacity": 30.7,
+    "sources": {
+      "references": [
+        {
+          "citation": "V. S. Subraveti, S. Roussanaly, R. Anantharaman, L. Riboldi, A. Rajendran. Techno-economic assessment of optimised vacuum swing adsorption for post-combustion CO2 capture from steam-methane reformer flue gas. Sep. Purif. Technol. 256 (2021) 117832",
+          "doi": "10.1016/j.seppur.2020.117832"
+        }
+      ],
+      "assumptions": []
+    }
+  },
+  "zeolite-13x-toth": {
+    "description": "Zeolite 13X, CO2/N2, non-competitive Toth on a partial pressure basis (independent sites)",
+    "components": [
+      "CO2",
+      "N2"
+    ],
+    "isotherm": {
+      "type": "Toth",
+      "qs": [
+        5.09,
+        3.08
+      ],
+      "b0": [
+        0.0004305,
+        8.82e-05
+      ],
+      "dU": [
+        -29380.0,
+        -17190.0
+      ],
+      "t": [
+        0.429,
+        0.869
+      ],
+      "alpha": [
+        0.0,
+        0.0
+      ],
+      "chi": [
+        0.0,
+        0.0
+      ],
+      "reference_temperature": 298.15,
+      "competitive": false,
+      "pressure_based": true
+    },
+    "heat_of_adsorption": [
+      29380.0,
+      17190.0
+    ],
+    "density": 1940.0,
+    "particle_radius": 0.001,
+    "particle_voidage": 0.37,
+    "tortuosity": 2.2,
+    "heat_capacity": 920.0,
+    "adsorbed_phase_heat_capacity": 0.0,
+    "sources": {
+      "references": [
+        {
+          "citation": "T. L. P. Dantas, F. M. T. Luna, I. J. Silva Jr., A. E. B. Torres, D. C. S. de Azevedo, A. E. Rodrigues, R. F. P. M. Moreira. Carbon dioxide-nitrogen separation through pressure swing adsorption. Chem. Eng. J. 172 (2011) 698-704",
+          "doi": "10.1016/j.cej.2011.06.037"
+        }
+      ],
+      "assumptions": [
+        "particle diameter 2 mm, not reported in the article"
+      ]
+    }
+  },
+  "zeolite-13x-humid": {
+    "description": "Zeolite 13X beads for humid gas, CO2/N2/H2O, competitive dual-site Langmuir; water fitted to the isotherms of Son, Richardson and Cmarik (J. Chem. Eng. Data 2019) below 60 % relative humidity (7 % RMS error)",
+    "components": [
+      "CO2",
+      "N2",
+      "H2O"
+    ],
+    "isotherm": {
+      "type": "DualSiteLangmuir",
+      "qsb": [
+        3.09,
+        5.84,
+        5.066
+      ],
+      "qsd": [
+        2.54,
+        0.0,
+        8.754
+      ],
+      "b0": [
+        8.65e-07,
+        2.5e-06,
+        1.2566e-11
+      ],
+      "d0": [
+        2.63e-08,
+        0.0,
+        1.0946e-09
+      ],
+      "dUb": [
+        -36641.21,
+        -15800.0,
+        -98005.0
+      ],
+      "dUd": [
+        -35690.66,
+        0.0,
+        -65197.0
+      ]
+    },
+    "heat_of_adsorption": [
+      36641.21,
+      15800.0,
+      65000.0
+    ],
+    "density": 1130.0,
+    "particle_radius": 0.001,
+    "particle_voidage": 0.35,
+    "tortuosity": 3.0,
+    "heat_capacity": 1070.0,
+    "adsorbed_phase_heat_capacity": 30.7,
+    "sources": {
+      "references": [
+        {
+          "citation": "R. Haghpanah, A. Majumder, R. Nilam, A. Rajendran, S. Farooq, I. A. Karimi, M. Amanullah. Multiobjective optimization of a four-step adsorption process for postcombustion CO2 capture via finite volume simulation. Ind. Eng. Chem. Res. 52 (2013) 4249-4265",
+          "doi": "10.1021/ie302658y"
+        },
+        {
+          "citation": "K. N. Son, J. A. Richardson, G. E. Cmarik. Equilibrium adsorption isotherms for H2O on zeolite 13X. J. Chem. Eng. Data 64 (2019) 1063-1071",
+          "doi": "10.1021/acs.jced.8b00961"
+        }
+      ],
+      "assumptions": [
+        "water: competitive dual-site Langmuir fitted by SwingPy to the measured isotherms of Son et al. (Table 1) below 60 % relative humidity, 7 % RMS error, up to 19 % at the lowest pressures",
+        "heat of adsorption of water 65 kJ/mol, within the range of the fitted site energies"
+      ]
+    }
+  },
+  "calf-20": {
+    "description": "CALF-20, structured (extrudates with polysulfone binder), CO2/N2, dual-site Langmuir with the equal energy scheme for N2",
+    "components": [
+      "CO2",
+      "N2"
+    ],
+    "isotherm": {
+      "type": "DualSiteLangmuir",
+      "qsb": [
+        2.687,
+        2.687
+      ],
+      "qsd": [
+        4.597,
+        4.597
+      ],
+      "b0": [
+        5.742e-07,
+        7.466e-07
+      ],
+      "d0": [
+        3.684e-09,
+        7.466e-07
+      ],
+      "dUb": [
+        -35180.0,
+        -17910.0
+      ],
+      "dUd": [
+        -35030.0,
+        -17910.0
+      ]
+    },
+    "heat_of_adsorption": [
+      35180.0,
+      17910.0
+    ],
+    "density": 570.0,
+    "particle_radius": 0.0005,
+    "particle_voidage": 0.35,
+    "tortuosity": 3.0,
+    "heat_capacity": 1350.0,
+    "adsorbed_phase_heat_capacity": 37.0,
+    "sources": {
+      "references": [
+        {
+          "citation": "T. T. T. Nguyen, G. K. H. Shimizu, A. Rajendran. CO2/N2 separation by vacuum swing adsorption using a metal-organic framework, CALF-20: Multi-objective optimization and experimental validation. Chem. Eng. J. 452 (2023) 139550 (values from Table 1 and Table A1 of the preprint, ChemRxiv 10.26434/chemrxiv-2022-c7hp1)",
+          "doi": "10.1016/j.cej.2022.139550"
+        }
+      ],
+      "assumptions": [
+        "particle radius 0.5 mm: the article gives no radius, only extrudates of 1 mm diameter and 1 to 3 mm length",
+        "heats of adsorption equal to the internal energies of the isotherm (site b for CO2)",
+        "heat capacity of the adsorbed phase equal to that of gaseous CO2 (841 J/(kg K)), as the article assumes"
+      ]
+    }
+  }
+}
