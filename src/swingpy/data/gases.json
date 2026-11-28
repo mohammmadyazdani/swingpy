@@ -1,0 +1,59 @@
+{
+  "reference_temperature": 298.15,
+  "units": {
+    "molar_mass": "kg/mol",
+    "heat_capacity": "J/(mol K), ideal gas at 298.15 K",
+    "viscosity": "Pa s at 298.15 K and 1 bar",
+    "diffusion_volume": "Fuller atomic diffusion volume, -"
+  },
+  "gases": {
+    "CO2": {
+      "molar_mass": 0.04401,
+      "heat_capacity": 37.12,
+      "viscosity": 1.49e-05,
+      "diffusion_volume": 26.7
+    },
+    "N2": {
+      "molar_mass": 0.028014,
+      "heat_capacity": 29.12,
+      "viscosity": 1.78e-05,
+      "diffusion_volume": 18.5
+    },
+    "O2": {
+      "molar_mass": 0.031999,
+      "heat_capacity": 29.38,
+      "viscosity": 2.06e-05,
+      "diffusion_volume": 16.3
+    },
+    "Ar": {
+      "molar_mass": 0.039948,
+      "heat_capacity": 20.79,
+      "viscosity": 2.26e-05,
+      "diffusion_volume": 16.2
+    },
+    "CH4": {
+      "molar_mass": 0.016043,
+      "heat_capacity": 35.69,
+      "viscosity": 1.1e-05,
+      "diffusion_volume": 25.14
+    },
+    "CO": {
+      "molar_mass": 0.02801,
+      "heat_capacity": 29.14,
+      "viscosity": 1.77e-05,
+      "diffusion_volume": 18.0
+    },
+    "He": {
+      "molar_mass": 0.0040026,
+      "heat_capacity": 20.786,
+      "viscosity": 1.99e-05,
+      "diffusion_volume": 2.67
+    }
+  },
+  "sources": {
+    "molar_mass": "IUPAC standard atomic weights",
+    "heat_capacity": "NIST Chemistry WebBook, ideal-gas heat capacity at 298.15 K (Chase, NIST-JANAF Thermochemical Tables, 1998)",
+    "viscosity": "NIST Chemistry WebBook, thermophysical properties of fluid systems, 298.15 K and 1 bar",
+    "diffusion_volume": "Fuller, Ensley and Giddings, Ind. Eng. Chem. 61 (1969) 37, as tabulated in Poling, Prausnitz and O'Connell, The Properties of Gases and Liquids, 5th ed. (2001), Table 11-1"
+  }
+}

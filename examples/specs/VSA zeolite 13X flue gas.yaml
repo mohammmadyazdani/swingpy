@@ -1,0 +1,77 @@
+# Four-step vacuum swing adsorption of dry flue gas on zeolite 13X.
+# Parameters of Haghpanah et al., Ind. Eng. Chem. Res. 52 (2013) 4249
+# (Tables 2 to 4), https://doi.org/10.1021/ie302658y
+version: 1
+components: [CO2, N2]
+
+gas:
+  equation_of_state: ideal
+  molar_masses: {CO2: 44.01 g/mol, N2: 28.013 g/mol}
+  heat_capacity: 30.7 J/(mol K)
+  viscosity: 1.72e-5 Pa s
+  molecular_diffusivity: 1.6e-5 m2/s
+  adiabatic_constant: 1.4
+
+adsorbent:
+  name: Zeolite 13X
+  particle_density: 1130 kg/m3
+  particle_radius: 1 mm
+  particle_voidage: 0.35
+  tortuosity: 3
+  heat_capacity: 1070 J/(kg K)
+  adsorbed_phase_heat_capacity: 30.7 J/(mol K)
+  heat_of_adsorption: {CO2: 36641.21 J/mol, N2: 15800 J/mol}
+  isotherm:
+    model: dual_site_langmuir
+    CO2: {qsb: 3.09 mol/kg, qsd: 2.54 mol/kg, b0: 8.65e-7 m3/mol, d0: 2.63e-8 m3/mol,
+          dUb: -36641.21 J/mol, dUd: -35690.66 J/mol}
+    N2: {qsb: 5.84 mol/kg, qsd: 0 mol/kg, b0: 2.50e-6 m3/mol, d0: 0 m3/mol,
+         dUb: -15800 J/mol, dUd: 0 J/mol}
+  kinetics: {model: macropore_ldf}
+
+bed:
+  length: 1 m
+  inner_radius: 0.1445 m
+  outer_radius: 0.1620 m
+  voidage: 0.37
+  pressure_drop: darcy
+  axial_thermal_conductivity: 0.09 W/(m K)
+  wall: {density: 7800 kg/m3, heat_capacity: 502 J/(kg K), thermal_conductivity: 16 W/(m K)}
+  heat_transfer: {inner: 8.6 W/(m2 K), outer: 2.5 W/(m2 K), ambient_temperature: 298.15 K}
+
+model:
+  cells: 30
+  scheme: weno
+  reference: {pressure: 1 bar, temperature: 298.15 K, velocity: 1 m/s}
+
+streams:
+  flue_gas: {composition: {CO2: 0.15, N2: 0.85}, temperature: 298.15 K}
+
+initial: {pressure: 0.1 bar, temperature: 298.15 K, composition: {CO2: 0, N2: 1}}
+
+cycle:
+  key_component: CO2
+  machines: {efficiency: 0.72, supply_pressure: 1 bar, discharge_pressure: 1 bar}
+  steps:
+    - name: PRES
+      duration: 15 s
+      feed_end:
+        type: pressure_inlet
+        stream: flue_gas
+        pressure: {ramp: exponential, from: 0.1 bar, to: 1 bar, rate: 0.5 1/s}
+    - name: FEED
+      duration: 15 s
+      feed_end: {type: feed, stream: flue_gas, velocity: 1 m/s}
+      product_end: {type: outlet, pressure: 1 bar, label: raffinate}
+    - name: BLOW
+      duration: 30 s
+      product_end:
+        type: outlet
+        label: blowdown
+        pressure: {ramp: exponential, from: 1 bar, to: 0.2 bar, rate: 0.5 1/s}
+    - name: EVAC
+      duration: 40 s
+      feed_end:
+        type: outlet
+        label: product
+        pressure: {ramp: exponential, from: 0.2 bar, to: 0.1 bar, rate: 0.5 1/s}

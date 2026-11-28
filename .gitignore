@@ -1,0 +1,9 @@
+site/
+dist/
+build/
+*.egg-info/
+__pycache__/
+.pytest_cache/
+.coverage
+coverage.xml
+Validation/Cache/

@@ -1,0 +1,60 @@
+site_name: SwingPy
+site_description: Finite volume simulation of pressure, vacuum and vacuum-pressure swing adsorption cycles (PSA, VSA, VPSA) in Python
+repo_url: https://github.com/mohammmadyazdani/swingpy
+site_author: Mohammad Yazdani
+copyright: Copyright &copy; 2026 Mohammad Yazdani · MIT License
+edit_uri: ""
+theme:
+  name: material
+  features: [navigation.sections, navigation.top, content.code.copy, search.highlight]
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: deep orange
+markdown_extensions:
+  - admonition
+  - tables
+  - toc: {permalink: true}
+  - pymdownx.arithmatex: {generic: true}
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets: {base_path: ["."], check_paths: true}
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: false
+            show_root_heading: true
+            members_order: source
+            show_if_no_docstring: false
+            filters: ["!^_"]
+            docstring_options:
+              warn_missing_types: false
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Quick start: quickstart.md
+  - User guide:
+      - Problem specifications: guide/specification.md
+      - The column model: guide/model.md
+      - Steps and cycles: guide/cycles.md
+      - Gas properties and adsorbents: guide/data.md
+      - Valves, layers, dead volume and IAST: guide/extensions.md
+      - Outputs and figures: guide/figures.md
+  - API reference:
+      - Problem specifications: api/specification.md
+      - Column model: api/model.md
+      - Gas, adsorbent and column: api/materials.md
+      - Isotherms: api/isotherms.md
+      - Boundary conditions and steps: api/boundaries.md
+      - Cycles, streams and acceleration: api/cycle.md
+      - Gas properties: api/data.md
+      - Outputs, figures and reports: api/plotting.md
+  - Comparison with published work: published.md
+  - Changelog: changelog.md

@@ -1,0 +1,166 @@
+# Flue gas (15 % CO2) on zeolite 13X: four step with light product pressurization, purity and recovery above 90 %.
+# Parameters of Haghpanah et al., AIChE J. 59 (2013) 4735, https://doi.org/10.1002/aic.14192
+# (column, adsorbent and gas of Haghpanah et al., Ind. Eng. Chem. Res. 52 (2013) 4249).
+version: 1
+components:
+- CO2
+- N2
+gas:
+  equation_of_state: ideal
+  molar_masses:
+    CO2: 0.04401 kg/mol
+    N2: 0.028014 kg/mol
+  heat_capacity: 30.7 J/(mol K)
+  viscosity: 1.72e-05 Pa s
+  molecular_diffusivity: 1.3e-05 m2/s
+  adiabatic_constant: 1.4
+adsorbent:
+  name: Zeolite 13X
+  particle_density: 1130.0 kg/m3
+  particle_radius: 0.00075 m
+  particle_voidage: 0.35
+  tortuosity: 3.0
+  heat_capacity: 1070.0 J/(kg K)
+  adsorbed_phase_heat_capacity: 30.7 J/(mol K)
+  heat_of_adsorption:
+    CO2: 36641.21 J/mol
+    N2: 15800.0 J/mol
+  isotherm:
+    model: dual_site_langmuir
+    CO2:
+      qsb: 3.09 mol/kg
+      qsd: 2.54 mol/kg
+      b0: 8.65e-07 m3/mol
+      d0: 2.63e-08 m3/mol
+      dUb: -36641.21 J/mol
+      dUd: -35690.66 J/mol
+    N2:
+      qsb: 5.84 mol/kg
+      qsd: 0.0 mol/kg
+      b0: 2.5e-06 m3/mol
+      d0: 0.0 m3/mol
+      dUb: -15800.0 J/mol
+      dUd: 0.0 J/mol
+  kinetics:
+    model: macropore_ldf
+    max_rate: 1000.0 1/s
+bed:
+  length: 1.0 m
+  inner_radius: 0.1445 m
+  outer_radius: 0.162 m
+  voidage: 0.37
+  pressure_drop: darcy
+  axial_thermal_conductivity: 0.09 W/(m K)
+  include_pore_gas: false
+  wall:
+    density: 7800.0 kg/m3
+    heat_capacity: 502.0 J/(kg K)
+    thermal_conductivity: 16.0 W/(m K)
+  heat_transfer:
+    inner: 8.6 W/(m2 K)
+    outer: 2.5 W/(m2 K)
+    ambient_temperature: 298.15 K
+  dead_volume:
+    feed: 0.0 m3
+    product: 0.0 m3
+model:
+  cells: 30
+  scheme: weno
+  backend: auto
+  reference:
+    pressure: 1.0 bar
+    temperature: 298.15 K
+    velocity: 0.46 m/s
+cycle:
+  key_component: CO2
+  product_stream: product
+  feed_stream: feed
+  steps:
+  - name: FEED
+    duration: 99.86 s
+    feed_end:
+      type: feed
+      stream: stream_1
+      velocity: 0.46 m/s
+      supply_pressure: 1.0 bar
+      efficiency: 0.72
+      label: feed
+    product_end:
+      type: outlet
+      pressure: 1.0 bar
+      label: raffinate
+      discharge_pressure: 1.0 bar
+      efficiency: 0.72
+      check_valve: false
+      record_as: raffinate
+  - name: BLOW
+    duration: 30.53 s
+    feed_end:
+      type: closed
+    product_end:
+      type: outlet
+      pressure:
+        ramp: exponential
+        from: 1.0 bar
+        to: 0.16 bar
+        rate: 0.5 1/s
+      label: blowdown
+      discharge_pressure: 1.0 bar
+      efficiency: 0.72
+      check_valve: false
+  - name: EVAC
+    duration: 116.82 s
+    feed_end:
+      type: outlet
+      pressure:
+        ramp: exponential
+        from: 0.16 bar
+        to: 0.03 bar
+        rate: 0.5 1/s
+      label: product
+      discharge_pressure: 1.0 bar
+      efficiency: 0.72
+      check_valve: false
+    product_end:
+      type: closed
+  - name: LPPR
+    until:
+      pressure: 0.99 bar
+      at: feed
+      direction: rising
+    max_duration: 99.86 s
+    feed_end:
+      type: closed
+    product_end:
+      type: replay
+      record: raffinate
+      label: raffinate
+      offset: 0.0 s
+      max_pressure: 1.0 bar
+  - name: PRES
+    until:
+      pressure: 0.999 bar
+      at: product
+      direction: rising
+    max_duration: 20.0 s
+    feed_end:
+      type: pressure_inlet
+      stream: stream_1
+      pressure: 1.0 bar
+      supply_pressure: 1.0 bar
+      efficiency: 0.72
+      label: feed
+    product_end:
+      type: closed
+initial:
+  pressure: 1.0 bar
+  temperature: 298.15 K
+  composition:
+    CO2: 0.0
+    N2: 1.0
+streams:
+  stream_1:
+    composition:
+      CO2: 0.15
+      N2: 0.85
+    temperature: 298.15 K

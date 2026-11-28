@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "swingpy"
+version = "1.0.0"
+description = "Simulation of pressure, vacuum and vacuum-pressure swing adsorption cycles (PSA, VSA, VPSA)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Mohammad Yazdani", email = "mohamad.yazdani7990@gmail.com"}]
+keywords = ["adsorption", "pressure swing adsorption", "vacuum swing adsorption", "PSA", "VSA", "VPSA",
+            "carbon capture", "finite volume", "process simulation", "chemical engineering"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Typing :: Typed",
+]
+dependencies = ["numpy>=1.24", "scipy>=1.11", "pyyaml>=6.0"]
+
+[project.optional-dependencies]
+plot = ["matplotlib>=3.7"]
+fast = ["numba>=0.58"]
+test = ["pytest>=7", "pytest-cov>=4"]
+docs = ["mkdocs>=1.6,<2", "mkdocs-material>=9.5", "mkdocstrings[python]>=0.25"]
+all = ["swingpy[plot,fast]"]
+
+[project.urls]
+Documentation = "https://mohammmadyazdani.github.io/swingpy"
+Source = "https://github.com/mohammmadyazdani/swingpy"
+Changelog = "https://github.com/mohammmadyazdani/swingpy/blob/main/CHANGELOG.md"
+Issues = "https://github.com/mohammmadyazdani/swingpy/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+swingpy = ["py.typed", "data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.coverage.run]
+source = ["swingpy"]
+# The numba kernel is compiled, so coverage cannot trace it; tests/test_backends.py
+# checks that it gives the same results as the NumPy code to round-off.
+omit = ["*/kernels.py"]
