@@ -1,0 +1,3474 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Finite volume simulation of pressure, vacuum and vacuum-pressure swing adsorption cycles (PSA, VSA, VPSA) in Python">
+      
+      
+        <meta name="author" content="Mohammad Yazdani">
+      
+      
+      
+        <link rel="prev" href="../model/">
+      
+      
+        <link rel="next" href="../isotherms/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Gas, adsorbent and column - SwingPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gas-adsorbent-and-column" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SwingPy" class="md-header__button md-logo" aria-label="SwingPy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SwingPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gas, adsorbent and column
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mohammmadyazdani/swingpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SwingPy" class="md-nav__button md-logo" aria-label="SwingPy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SwingPy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mohammmadyazdani/swingpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem specifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The column model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/cycles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steps and cycles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas properties and adsorbents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Valves, layers, dead volume and IAST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs and figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem specifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Column model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas, adsorbent and column
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas, adsorbent and column
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.gas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="gas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GAS_CONSTANT" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GAS_CONSTANT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.MOLAR_MASSES" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MOLAR_MASSES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GasMixture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GasMixture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GasMixture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GasMixture.index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        index
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GasMixture.composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GasMixture.gamma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gamma
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.LinearCO2AdiabaticConstant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LinearCO2AdiabaticConstant
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.adsorbent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        adsorbent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="adsorbent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.MacroporeLDF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MacroporeLDF
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MacroporeLDF">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.MacroporeLDF.rate_constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rate_constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.ConstantLDF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConstantLDF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.PressureScaledLDF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PressureScaledLDF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.SeriesLDF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SeriesLDF
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SeriesLDF">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.SeriesLDF.rate_constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rate_constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.Adsorbent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adsorbent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.LayeredBed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LayeredBed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LayeredBed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.LayeredBed.layer_cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        layer_cells
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.LayeredBed.cell_view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cell_view
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.ParticleDiffusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ParticleDiffusion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ParticleDiffusion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.ParticleDiffusion.derivatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        derivatives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.ParticleDiffusion.average" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        average
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        column
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="column">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.column.Column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Column
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Column">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.column.Column.cross_section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cross_section
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.column.Column.adsorbent_volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        adsorbent_volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isotherms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Isotherms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../boundaries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boundary conditions and steps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cycles, streams and acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plotting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs, figures and reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../published/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparison with published work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.gas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="gas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GAS_CONSTANT" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GAS_CONSTANT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.MOLAR_MASSES" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MOLAR_MASSES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GasMixture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GasMixture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GasMixture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GasMixture.index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        index
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GasMixture.composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        composition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.GasMixture.gamma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gamma
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.gas.LinearCO2AdiabaticConstant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LinearCO2AdiabaticConstant
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.adsorbent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        adsorbent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="adsorbent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.MacroporeLDF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MacroporeLDF
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MacroporeLDF">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.MacroporeLDF.rate_constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rate_constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.ConstantLDF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ConstantLDF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.PressureScaledLDF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PressureScaledLDF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.SeriesLDF" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SeriesLDF
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SeriesLDF">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.SeriesLDF.rate_constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rate_constants
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.Adsorbent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adsorbent
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.LayeredBed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LayeredBed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LayeredBed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.LayeredBed.layer_cells" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        layer_cells
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.LayeredBed.cell_view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cell_view
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.ParticleDiffusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ParticleDiffusion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ParticleDiffusion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.ParticleDiffusion.derivatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        derivatives
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.adsorbent.ParticleDiffusion.average" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        average
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        column
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="column">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.column.Column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Column
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Column">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.column.Column.cross_section" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cross_section
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.column.Column.adsorbent_volume" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        adsorbent_volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="gas-adsorbent-and-column">Gas, adsorbent and column<a class="headerlink" href="#gas-adsorbent-and-column" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.gas" class="doc doc-heading">
+            <code>swingpy.gas</code>
+
+
+<a href="#swingpy.gas" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Properties of the gas mixture that flows through the column.</p>
+<p>The gas is an ideal mixture of any number of components. Its transport
+properties are taken as constant, which is the usual assumption of the
+detailed adsorption models this package follows. The adiabatic constant,
+which only enters the energy of compressors and vacuum pumps, may depend on
+composition.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="swingpy.gas.GAS_CONSTANT" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">GAS_CONSTANT</span> <span class="o">=</span> <span class="mf">8.314</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#swingpy.gas.GAS_CONSTANT" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Universal gas constant in J/(mol K).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="swingpy.gas.MOLAR_MASSES" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">MOLAR_MASSES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'CO2'</span><span class="p">:</span> <span class="mf">0.04401</span><span class="p">,</span> <span class="s1">'N2'</span><span class="p">:</span> <span class="mf">0.028014</span><span class="p">,</span> <span class="s1">'O2'</span><span class="p">:</span> <span class="mf">0.031999</span><span class="p">,</span> <span class="s1">'Ar'</span><span class="p">:</span> <span class="mf">0.039948</span><span class="p">,</span> <span class="s1">'CH4'</span><span class="p">:</span> <span class="mf">0.016043</span><span class="p">,</span> <span class="s1">'CO'</span><span class="p">:</span> <span class="mf">0.02801</span><span class="p">}</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#swingpy.gas.MOLAR_MASSES" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Molar masses in kg/mol of common gases, used when none are given.</p>
+
+    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.gas.GasMixture" class="doc doc-heading">
+            <code>GasMixture</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.gas.GasMixture" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Components and physical properties of the gas phase.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.gas.GasMixture.components">components</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Names of the components, in the order used everywhere
+else (isotherm parameters, feed compositions, results). The
+last component is obtained by closure, so it is best to list
+the dominant carrier gas (for example N2) last.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.gas.GasMixture.heat_capacity">heat_capacity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Molar heat capacity of the gas, J/(mol K).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.gas.GasMixture.viscosity">viscosity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dynamic viscosity, Pa s.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.gas.GasMixture.molecular_diffusivity">molecular_diffusivity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Molecular diffusivity used for macropore
+diffusion and axial dispersion, m2/s.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.gas.GasMixture.adiabatic_constant">adiabatic_constant</span></code></td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="float">float</span>, <span title="typing.Callable">Callable</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Ratio of heat capacities used for compression
+work. Either a number or a function of the mole fractions
+(a sequence ordered like <code>components</code>).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.gas.GasMixture.molar_masses">molar_masses</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Molar masses in kg/mol. Taken from <code>MOLAR_MASSES</code>
+when not given. Only needed by the Ergun equation.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.gas.GasMixture.index" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">index</span><span class="p">(</span><span class="n">component</span><span class="p">)</span></code>
+
+<a href="#swingpy.gas.GasMixture.index" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Position of a component in <code>components</code>.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.gas.GasMixture.composition" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">composition</span><span class="p">(</span><span class="n">mole_fractions</span><span class="p">)</span></code>
+
+<a href="#swingpy.gas.GasMixture.composition" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Turn a composition into an array ordered like <code>components</code>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>mole_fractions</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Either a sequence ordered like <code>components</code>
+or a dict such as <code>{"CO2": 0.15, "N2": 0.85}</code>. Missing
+components of a dict are zero.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="numpy.ndarray">ndarray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Mole fractions as a numpy array that sums to one.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.gas.GasMixture.gamma" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">gamma</span><span class="p">(</span><span class="n">mole_fractions</span><span class="p">)</span></code>
+
+<a href="#swingpy.gas.GasMixture.gamma" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Adiabatic constant for a given composition.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.gas.LinearCO2AdiabaticConstant" class="doc doc-heading">
+            <code>LinearCO2AdiabaticConstant</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.gas.LinearCO2AdiabaticConstant" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Adiabatic constant of CO2/N2 mixtures as a linear function of the CO2
+mole fraction, gamma = 1.395 - 0.105 y_CO2, a linear fit of NIST
+reference data between pure N2 and pure CO2.</p>
+<p>Pass an instance as <code>GasMixture.adiabatic_constant</code>. It matters for the
+vacuum pumps that handle CO2-rich gas: compared with a constant
+gamma = 1.4, it lowers the evacuation work by about 10 % at 0.02 to
+0.03 bar.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.gas.LinearCO2AdiabaticConstant.co2_index">co2_index</span></code></td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Position of CO2 in <code>GasMixture.components</code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.adsorbent" class="doc doc-heading">
+            <code>swingpy.adsorbent</code>
+
+
+<a href="#swingpy.adsorbent" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Adsorbent particles and their mass transfer kinetics.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.adsorbent.MacroporeLDF" class="doc doc-heading">
+            <code>MacroporeLDF</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.adsorbent.MacroporeLDF" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Linear driving force rate controlled by molecular diffusion in macropores.</p>
+<p>The rate constant of component i is</p>
+<div class="highlight"><pre><span></span><code>k_i = (c_i / q_i*) 15 eps_p D_p / r_p^2,   with D_p = D_m / tortuosity,
+</code></pre></div>
+<p>where q_i* is expressed per cubic metre of adsorbent so that c_i / q_i*
+is dimensionless (q_i* in mol/kg times the particle density), the
+Glueckauf approximation for diffusion in a spherical particle.</p>
+<p>A component that the solid barely holds (q_i* / c_i close to zero, for
+example nitrogen displaced by water) gets an enormous rate constant,
+which only means that it is at equilibrium; such rates are capped at
+<code>max_rate</code> (1/s), far above any rate that matters, so that the
+equations do not become needlessly stiff.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.adsorbent.MacroporeLDF.rate_constants" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rate_constants</span><span class="p">(</span><span class="n">slopes</span><span class="p">,</span> <span class="n">adsorbent</span><span class="p">,</span> <span class="n">gas</span><span class="p">,</span> <span class="n">pressure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#swingpy.adsorbent.MacroporeLDF.rate_constants" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>LDF rate constants in 1/s, with the shape of <code>slopes</code> (m3/kg).</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.adsorbent.ConstantLDF" class="doc doc-heading">
+            <code>ConstantLDF</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.adsorbent.ConstantLDF" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Linear driving force with fixed rate constants.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.ConstantLDF.rates">rates</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>One rate constant per gas component, 1/s.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.adsorbent.PressureScaledLDF" class="doc doc-heading">
+            <code>PressureScaledLDF</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.adsorbent.PressureScaledLDF" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Linear driving force with rate constants inversely proportional to pressure,</p>
+<div class="highlight"><pre><span></span><code>k_i = rates_i * reference_pressure / P,
+</code></pre></div>
+<p>the behaviour of uptake controlled by molecular diffusion in the
+macropores (the molecular diffusivity scales as 1/P). Uptake is then much
+faster at low pressure (blowdown, purge) than at high pressure (feed).</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.PressureScaledLDF.rates">rates</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Rate constants at the reference pressure, 1/s, one per component.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.PressureScaledLDF.reference_pressure">reference_pressure</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>bar.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.adsorbent.SeriesLDF" class="doc doc-heading">
+            <code>SeriesLDF</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.adsorbent.SeriesLDF" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Linear driving force for a bidisperse particle, with the film, macropore
+and micropore resistances added in series (Glueckauf; Ruthven, Principles
+of Adsorption and Adsorption Processes, 1984, Eq. 8.53 and 8.54):</p>
+<div class="highlight"><pre><span></span><code>1 / k_i = K_i / (a_p k_f) + K_i R_p^2 / (Omega_m eps_p D_p,i) + r_c^2 / (Omega_c D_c,i),
+K_i = rho_p q_i* / c_i,   D_c,i / r_c^2 = (D_c0 / r_c^2)_i exp(-E_a,i / RT),
+</code></pre></div>
+<p>where K_i is the dimensionless slope of the isotherm per volume of particle
+(the secant q*/c, as in <code>MacroporeLDF</code>), a_p the external area per volume
+of particle (3 / R_p for spheres, 2 / R_p for cylinders) and Omega the LDF
+factors (15 for spheres, 8 for cylinders). This is a single LDF that
+stands in for a bi-LDF model, where the macropore gas and the micropore
+loading are separate states; it is exact for a linear isotherm at long times and an
+approximation otherwise, so say so when you use it.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.SeriesLDF.micropore_rates">micropore_rates</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>(D_c0 / r_c^2)_i, 1/s, one per component (<code>inf</code> for
+no micropore resistance).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.SeriesLDF.activation_energies">activation_energies</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>E_a,i, J/mol (zero for a constant D_c/r_c^2).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.SeriesLDF.macropore_diffusivities">macropore_diffusivities</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>D_p,i, m2/s (<code>inf</code> for none).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.SeriesLDF.film_coefficient">film_coefficient</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>k_f, m/s (<code>inf</code> for no film resistance).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.SeriesLDF.micropore_factor">micropore_factor</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Omega_c, -.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.SeriesLDF.macropore_factor">macropore_factor</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Omega_m, -.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.SeriesLDF.area_factor">area_factor</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>a_p R_p, - (3 for spheres, 2 for cylinders).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.SeriesLDF.max_rate">max_rate</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Cap on the rate constants, 1/s (see <code>MacroporeLDF</code>).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.adsorbent.SeriesLDF.rate_constants" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rate_constants</span><span class="p">(</span><span class="n">slopes</span><span class="p">,</span> <span class="n">adsorbent</span><span class="p">,</span> <span class="n">gas</span><span class="p">,</span> <span class="n">pressure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#swingpy.adsorbent.SeriesLDF.rate_constants" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>LDF rate constants in 1/s, with the shape of <code>slopes</code> (m3/kg).</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.adsorbent.Adsorbent" class="doc doc-heading">
+            <code>Adsorbent</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.adsorbent.Adsorbent" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>An adsorbent material in particle form.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.name">name</span></code></td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Display name, for reports and plots.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.isotherm">isotherm</span></code></td>
+            <td>
+                  <code><span title="object">object</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Equilibrium model, for example <code>DualSiteLangmuir</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.heat_of_adsorption">heat_of_adsorption</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>One positive value per gas component, J/mol
+(-dH). Isotherm papers often give only internal energies of
+adsorption; state clearly which value you use.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.density">density</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Particle density, kg/m3.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.particle_radius">particle_radius</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>m.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.particle_voidage">particle_voidage</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Macropore porosity of the particle, -.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.tortuosity">tortuosity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Macropore tortuosity, -.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.heat_capacity">heat_capacity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Specific heat capacity of the solid, J/(kg K).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.adsorbed_phase_heat_capacity">adsorbed_phase_heat_capacity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Molar heat capacity of the adsorbed
+phase, J/(mol K).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.kinetics">kinetics</span></code></td>
+            <td>
+                  <code><span title="object">object</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Mass transfer model, <code>MacroporeLDF()</code> by default.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.Adsorbent.notes">notes</span></code></td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Free text about the parameters (origin, assumptions).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.adsorbent.LayeredBed" class="doc doc-heading">
+            <code>LayeredBed</code>
+
+
+<a href="#swingpy.adsorbent.LayeredBed" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>A bed of several adsorbent layers along the column, for example a guard
+layer of alumina or activated carbon at the feed end and a zeolite above
+it, as in most industrial PSA units.</p>
+<p>Pass it to <code>ColumnModel</code> in place of an <code>Adsorbent</code>. Every layer keeps
+its own isotherm, kinetics, density, heat capacity, heats of adsorption,
+particle size and, optionally, bed voidage, applied to the cells it fills;
+the pressure drop and axial dispersion of every face follow from the
+particle size and voidage on both sides of it.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>layers</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>(Adsorbent, length fraction) or (Adsorbent, length fraction,
+bed voidage) tuples from the feed end to the product end; the
+fractions must add up to 1. A layer without a voidage takes that
+of the column.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>name</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Display name.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.adsorbent.LayeredBed.layer_cells" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">layer_cells</span><span class="p">(</span><span class="n">n_cells</span><span class="p">)</span></code>
+
+<a href="#swingpy.adsorbent.LayeredBed.layer_cells" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Cell indices of every layer (each cell belongs to the layer that holds its centre).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.adsorbent.LayeredBed.cell_view" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cell_view</span><span class="p">(</span><span class="n">n_cells</span><span class="p">)</span></code>
+
+<a href="#swingpy.adsorbent.LayeredBed.cell_view" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>An Adsorbent-like object whose properties are arrays over the cells.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.adsorbent.ParticleDiffusion" class="doc doc-heading">
+            <code>ParticleDiffusion</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.adsorbent.ParticleDiffusion" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Fickian diffusion inside spherical particles (or crystals), resolved in
+concentric shells, instead of a linear driving force:</p>
+<div class="highlight"><pre><span></span><code>dq/dt = D / r^2 d/dr (r^2 dq/dr),   q(r_p) = q*(c, T) at the surface.
+</code></pre></div>
+<p>This is the model of uptake controlled by diffusion in the micropores of
+a crystal or a carbon molecular sieve, where it matters for kinetic
+separations; for a single particle at constant surface loading it
+reproduces the exact solution of Crank (The Mathematics of Diffusion,
+1975, Eq. 6.20), to which a linear driving force with k = 15 D / r_p^2 is
+the Glueckauf approximation.</p>
+<p>The particle is divided into <code>shells</code> shells, thinner towards the
+surface, and solved by finite volumes; the uptake of a cell is the flux through the
+particle surface, so mass is conserved exactly.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.ParticleDiffusion.rates">rates</span></code></td>
+            <td>
+                  <code><span title="typing.Sequence">Sequence</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Diffusional time constants D_i / r_p^2, 1/s, one per component.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.adsorbent.ParticleDiffusion.shells">shells</span></code></td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Number of shells (12 by default).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.adsorbent.ParticleDiffusion.derivatives" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">derivatives</span><span class="p">(</span><span class="n">shells</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="n">time_scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span></code>
+
+<a href="#swingpy.adsorbent.ParticleDiffusion.derivatives" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Time derivatives of the shell loadings and of the particle average.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>shells</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Loadings of the shells, shape (n, shells, N).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>surface</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Equilibrium loading at the particle surface, shape (n, N).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>time_scale</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Seconds per unit of model time.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>(d shells / dt, d average / dt), shapes (n, shells, N) and (n, N).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.adsorbent.ParticleDiffusion.average" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">average</span><span class="p">(</span><span class="n">shells</span><span class="p">)</span></code>
+
+<a href="#swingpy.adsorbent.ParticleDiffusion.average" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Volume average of the shell loadings, shape (n, N).</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.column" class="doc doc-heading">
+            <code>swingpy.column</code>
+
+
+<a href="#swingpy.column" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Geometry and thermal properties of a packed adsorption column.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.column.Column" class="doc doc-heading">
+            <code>Column</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.column.Column" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>A cylindrical packed bed with a steel wall.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.length">length</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Bed length, m.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.inner_radius">inner_radius</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>m.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.outer_radius">outer_radius</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>m. Only used by the wall energy balance.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.bed_voidage">bed_voidage</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Interparticle voidage, -.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.pressure_drop">pressure_drop</span></code></td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>"darcy" (viscous term only) or "ergun" (viscous and inertial terms).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.axial_thermal_conductivity">axial_thermal_conductivity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Effective axial conductivity of the bed, W/(m K).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.inner_heat_transfer">inner_heat_transfer</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Bed to wall coefficient, W/(m2 K). Zero for an adiabatic column.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.outer_heat_transfer">outer_heat_transfer</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Wall to ambient coefficient, W/(m2 K).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.wall_density">wall_density</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>kg/m3.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.wall_heat_capacity">wall_heat_capacity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>J/(kg K).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.wall_thermal_conductivity">wall_thermal_conductivity</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>W/(m K).</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.include_pore_gas">include_pore_gas</span></code></td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Count the gas in the pores of the particles as gas
+holdup: the gas balance then uses the total voidage
+eps_t = eps_b + (1 - eps_b) eps_p (eps_p is the particle voidage
+of the adsorbent), while the flow through the bed and the solid
+fraction use the bed voidage eps_b. Off by default, as in models
+that lump the pore gas into the solid; it matters most for weakly
+adsorbed gases such as nitrogen, whose front it slows down.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.dead_volume_feed,">dead_volume_feed,</span></code></td>
+            <td>
+                  <code><span title="swingpy.column.Column.dead_volume_product">dead_volume_product</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Well-mixed gas volume at each
+end of the bed (pipes, distributors, valve bodies), m3. It holds
+gas but no adsorbent, and slows the pressure and composition
+changes at that end; it is often what makes small laboratory
+columns behave differently from the model of the bed alone.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.column.Column.ambient_temperature">ambient_temperature</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Temperature outside the wall, K.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.column.Column.cross_section" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cross_section</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#swingpy.column.Column.cross_section" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Inner cross-sectional area, m2.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.column.Column.adsorbent_volume" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">adsorbent_volume</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#swingpy.column.Column.adsorbent_volume" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Volume of the solid particles, (1 - eps) A L, m3.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Mohammad Yazdani · MIT License
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

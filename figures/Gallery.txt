@@ -1,0 +1,1 @@
+at cyclic steady state, reached after 360 cycles; purity 79.39 %, recovery 36.64 %

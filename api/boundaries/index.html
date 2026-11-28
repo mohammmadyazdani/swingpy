@@ -1,0 +1,4391 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Finite volume simulation of pressure, vacuum and vacuum-pressure swing adsorption cycles (PSA, VSA, VPSA) in Python">
+      
+      
+        <meta name="author" content="Mohammad Yazdani">
+      
+      
+      
+        <link rel="prev" href="../isotherms/">
+      
+      
+        <link rel="next" href="../cycle/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Boundary conditions and steps - SwingPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#boundary-conditions-and-steps" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SwingPy" class="md-header__button md-logo" aria-label="SwingPy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SwingPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Boundary conditions and steps
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mohammmadyazdani/swingpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SwingPy" class="md-nav__button md-logo" aria-label="SwingPy" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SwingPy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mohammmadyazdani/swingpy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem specifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The column model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/cycles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steps and cycles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas properties and adsorbents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Valves, layers, dead volume and IAST
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/figures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs and figures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../specification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problem specifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Column model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../materials/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas, adsorbent and column
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isotherms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Isotherms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boundary conditions and steps
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boundary conditions and steps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        boundaries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="boundaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Efficiency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.STANDARD_MOLAR_VOLUME" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        STANDARD_MOLAR_VOLUME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.ExponentialRamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ExponentialRamp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.LinearRamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LinearRamp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.FaceState" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FaceState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Closed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Closed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.FeedInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FeedInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.PressurizationInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PressurizationInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.PressureOutlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PressureOutlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.BufferInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BufferInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.TankInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TankInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.VacuumPump" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VacuumPump
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VacuumPump">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.VacuumPump.interstitial_velocity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        interstitial_velocity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.VacuumPump.capacity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        capacity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.FlowInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FlowInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.MixingInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MixingInlet
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MixingInlet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.MixingInlet.stream_moles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stream_moles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.RecordedPressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecordedPressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Valve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Valve
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.as_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        as_history
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.falling_vacuum_efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        falling_vacuum_efficiency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.standard_litres_per_minute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        standard_litres_per_minute
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        steps
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.steps.Step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.steps.Step.direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.steps.PressureReached" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PressureReached
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PressureReached">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.steps.PressureReached.value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        value
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cycles, streams and acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas properties
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plotting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outputs, figures and reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../published/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparison with published work
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        boundaries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="boundaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Efficiency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.STANDARD_MOLAR_VOLUME" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        STANDARD_MOLAR_VOLUME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constant
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.ExponentialRamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ExponentialRamp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.LinearRamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LinearRamp
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.FaceState" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FaceState
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boundary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Closed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Closed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.FeedInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FeedInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.PressurizationInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PressurizationInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.PressureOutlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PressureOutlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.BufferInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BufferInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.TankInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TankInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.VacuumPump" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VacuumPump
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VacuumPump">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.VacuumPump.interstitial_velocity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        interstitial_velocity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.VacuumPump.capacity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        capacity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.FlowInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FlowInlet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.MixingInlet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MixingInlet
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MixingInlet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.MixingInlet.stream_moles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stream_moles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.RecordedPressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RecordedPressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.Valve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Valve
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.as_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        as_history
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.falling_vacuum_efficiency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        falling_vacuum_efficiency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.boundaries.standard_litres_per_minute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        standard_litres_per_minute
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#swingpy.steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        steps
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.steps.Step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.steps.Step.direction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        direction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.steps.PressureReached" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PressureReached
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PressureReached">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swingpy.steps.PressureReached.value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        value
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="boundary-conditions-and-steps">Boundary conditions and steps<a class="headerlink" href="#boundary-conditions-and-steps" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.boundaries" class="doc doc-heading">
+            <code>swingpy.boundaries</code>
+
+
+<a href="#swingpy.boundaries" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Boundary conditions at the two ends of the column.</p>
+<p>A cycle step is defined by what happens at the feed end (Z = 0) and at the
+product end (Z = 1). Each end is described by one of the classes below, so
+a new step is built by combining two of them rather than by editing the
+model. The same class works at either end: for example <code>PressureOutlet</code>
+at the product end is a blowdown, and at the feed end it is an evacuation.</p>
+<p>User inputs are in practical units: pressures in bar, velocities in m/s
+(interstitial), temperatures in K, compositions as dicts or sequences of
+mole fractions. The model converts them internally.</p>
+<p>Every boundary also says what kind of stream it is (<code>stream</code>), which the
+cycle uses to compute purity and recovery, and which machine moves the gas
+(a compressor fed from <code>supply_pressure</code>, or a vacuum pump discharging to
+<code>discharge_pressure</code>), which the cycle uses to compute energy.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="swingpy.boundaries.Efficiency" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">Efficiency</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#swingpy.boundaries.Efficiency" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>A machine efficiency: a number, or a function of the suction pressure in bar.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="swingpy.boundaries.STANDARD_MOLAR_VOLUME" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">STANDARD_MOLAR_VOLUME</span> <span class="o">=</span> <span class="mf">0.022414</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#swingpy.boundaries.STANDARD_MOLAR_VOLUME" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Molar volume of an ideal gas at 0 C and 1 atm, m3/mol, for flows given in standard litres.</p>
+
+    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.Constant" class="doc doc-heading">
+            <code>Constant</code>
+
+
+<a href="#swingpy.boundaries.Constant" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>A pressure that does not change during the step, in bar.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.ExponentialRamp" class="doc doc-heading">
+            <code>ExponentialRamp</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.boundaries.ExponentialRamp" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Pressure relaxing exponentially from <code>start</code> to <code>end</code> (bar):</p>
+<div class="highlight"><pre><span></span><code>P(t) = end + (start - end) exp(-rate t)
+</code></pre></div>
+<p>a common way of prescribing the pressure history of pressurization,
+blowdown and evacuation steps, with <code>rate</code> the constant lambda in 1/s.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.LinearRamp" class="doc doc-heading">
+            <code>LinearRamp</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.boundaries.LinearRamp" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Pressure changing linearly from <code>start</code> to <code>end</code> (bar) over
+<code>duration</code> (s), then held at <code>end</code>:</p>
+<div class="highlight"><pre><span></span><code>P(t) = start + (end - start) min(t / duration, 1)
+</code></pre></div>
+<p>as used for the feed pressurization of Nguyen et al. (Chem. Eng. J. 452
+(2023) 139550, Eq. 9).</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.FaceState" class="doc doc-heading">
+            <code>FaceState</code>
+
+
+<a href="#swingpy.boundaries.FaceState" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="typing.NamedTuple">NamedTuple</span></code></p>
+
+
+
+        <p>Dimensionless velocity, pressure, independent mole fractions and temperature at one end face.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.Boundary" class="doc doc-heading">
+            <code>Boundary</code>
+
+
+<a href="#swingpy.boundaries.Boundary" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Base class of all end conditions.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.boundaries.Boundary.role">role</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>"closed", "inlet" or "outlet". Fixes the flow direction of the
+step and how the stream is counted in the cycle balances.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.boundaries.Boundary.stream">stream</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label of the stream, for example "feed", "product",
+"raffinate" or "waste". Purity and recovery are computed from
+these labels.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.boundaries.Boundary.supply_pressure">supply_pressure</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>For inlets, the pressure the gas is available at
+(bar); a compressor is needed above it.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.boundaries.Boundary.discharge_pressure">discharge_pressure</span></code></td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>For outlets, the pressure the gas is delivered
+to (bar); a vacuum pump is needed below it.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.boundaries.Boundary.efficiency">efficiency</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Efficiency = Union[float, Callable[[float], float]]
+
+  
+      module-attribute
+   (swingpy.boundaries.Efficiency)" href="#swingpy.boundaries.Efficiency">Efficiency</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Efficiency of that machine (number or function of the
+suction pressure in bar).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.Closed" class="doc doc-heading">
+            <code>Closed</code>
+
+
+<a href="#swingpy.boundaries.Closed" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>A closed valve: no flow, and zero gradients of pressure, composition and temperature.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.FeedInlet" class="doc doc-heading">
+            <code>FeedInlet</code>
+
+
+<a href="#swingpy.boundaries.FeedInlet" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>Gas entering at a fixed interstitial velocity (flow controlled feed).</p>
+<p>The face pressure follows from the pressure drop over half a cell, and
+composition and temperature from the Danckwerts conditions
+at the inlet.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>velocity</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Interstitial velocity at the face, m/s.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Mole fractions of the entering gas (dict or sequence),
+or the name of a recorded stream (<code>record_as</code>): the gas is then
+its mean composition, as from a well mixed tank.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>temperature</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Temperature of the entering gas, K.</p>
+              </div>
+            </td>
+            <td>
+                  <code>298.15</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>supply_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pressure the gas is available at, bar. Energy is
+charged for compressing it up to the face pressure.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>efficiency</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Efficiency = Union[float, Callable[[float], float]]
+
+  
+      module-attribute
+   (swingpy.boundaries.Efficiency)" href="#swingpy.boundaries.Efficiency">Efficiency</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Compressor efficiency.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.72</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Stream label, "feed" by default.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;feed&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>default_composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>With a recorded stream, the gas used until the
+record exists (the first cycle).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.PressurizationInlet" class="doc doc-heading">
+            <code>PressurizationInlet</code>
+
+
+<a href="#swingpy.boundaries.PressurizationInlet" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>Gas entering while the face pressure follows a prescribed history
+(feed pressurization).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Face pressure in bar, a number or a history such as
+<code>ExponentialRamp</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>As for <code>FeedInlet</code>; it can also be the name of a
+recorded stream (its mean composition), for example
+pressurization with the product of another column.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>temperature</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>As for <code>FeedInlet</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>298.15</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>supply_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>As for <code>FeedInlet</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>efficiency</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Efficiency = Union[float, Callable[[float], float]]
+
+  
+      module-attribute
+   (swingpy.boundaries.Efficiency)" href="#swingpy.boundaries.Efficiency">Efficiency</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>As for <code>FeedInlet</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.72</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>As for <code>FeedInlet</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;feed&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>default_composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>As for <code>FeedInlet</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.PressureOutlet" class="doc doc-heading">
+            <code>PressureOutlet</code>
+
+
+<a href="#swingpy.boundaries.PressureOutlet" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>Gas leaving while the face pressure is held or ramped: a back pressure
+regulator (constant pressure) or a vacuum pump following a prescribed
+pressure history (blowdown and evacuation).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Face pressure in bar, a number or a history.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>discharge_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pressure the gas is delivered to, bar. Energy is
+charged for pumping from the face pressure up to it.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>efficiency</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Efficiency = Union[float, Callable[[float], float]]
+
+  
+      module-attribute
+   (swingpy.boundaries.Efficiency)" href="#swingpy.boundaries.Efficiency">Efficiency</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Vacuum pump efficiency, a number or a function of the
+suction pressure such as <code>falling_vacuum_efficiency</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.72</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Stream label, "waste" by default; use "product" for the
+stream whose purity and recovery are reported.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;waste&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>record_as</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name under which the outgoing stream is recorded, so that
+a later step can use it (<code>BufferInlet</code>, <code>TankInlet</code>).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>check_valve</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Let gas only leave: while the column is below the set
+pressure the face stays closed (for example while the feed brings
+a column back up from sub-atmospheric pressure).</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.BufferInlet" class="doc doc-heading">
+            <code>BufferInlet</code>
+
+
+<a href="#swingpy.boundaries.BufferInlet" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>Gas entering from a recorded stream, replayed in time: the molar flow,
+composition and temperature follow the record of another step. Used for
+light product pressurization and light reflux, where the raffinate of
+the adsorption step enters the column at the product end.</p>
+<p>The molar flow is imposed, so the velocity follows from v P / T at the
+face (equivalently v = v_source P_source / P). When the record is exhausted or not yet available
+(first cycle), no gas enters.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>buffer</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the record (<code>record_as</code> of the source outlet).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>offset</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Time into the record at which the replay starts, s. Lets two
+steps share one record, for example light reflux using the first
+t_LR seconds of the raffinate and pressurization the rest.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Stream label of the recycled gas.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;raffinate&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pressure of the source, bar. Gas cannot enter a column
+at a higher pressure than the one it is supplied at, so when the
+recorded flow would need a higher face pressure, the face is held
+at <code>max_pressure</code> and the flow follows from the pressure drop
+instead (it falls to zero as the column approaches that
+pressure). Without it the recorded flow is imposed whatever the
+pressure, which over-pressurizes the column near the end of a
+light product pressurization.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Replay only the recorded molar flow, with this gas
+instead of the recorded one (mole fractions, dict or sequence),
+for example a single column simulation of pressure equalization
+with pure product gas. None (default) replays the recorded
+composition.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.TankInlet" class="doc doc-heading">
+            <code>TankInlet</code>
+
+
+<a href="#swingpy.boundaries.TankInlet" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>Gas entering at a constant molar flow from a well mixed tank, used for
+heavy reflux: a fraction of the extract of a recorded step is sent back
+to the feed end over the duration of this step. The composition is the mean composition of the
+recorded stream.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>buffer</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the record that fills the tank.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fraction</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Fraction of the recorded moles fed back (reflux ratio).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>temperature</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Temperature of the gas leaving the tank, K.</p>
+              </div>
+            </td>
+            <td>
+                  <code>298.15</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>supply_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Tank pressure, bar; a compressor is charged above it.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>efficiency</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Efficiency = Union[float, Callable[[float], float]]
+
+  
+      module-attribute
+   (swingpy.boundaries.Efficiency)" href="#swingpy.boundaries.Efficiency">Efficiency</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Compressor efficiency.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.72</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Stream label, "product" by default, so that the refluxed
+gas is subtracted from the product.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;product&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.VacuumPump" class="doc doc-heading">
+            <code>VacuumPump</code>
+
+
+<a href="#swingpy.boundaries.VacuumPump" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>A vacuum pump of constant volumetric flow drawing gas out of the column.</p>
+<p>The pump fixes the actual volumetric flow at the column end, and hence
+the interstitial velocity v = S / (eps A), while the face pressure
+follows from the pressure drop over half a cell. How long it takes to
+reach a given vacuum is then a result of the simulation rather than an
+input, so the step is usually ended with <code>stop=PressureReached(...)</code>.
+This gives more realistic step times and pump sizes than prescribed
+pressure histories.</p>
+<p>The pump is given either by its capacity or by the interstitial velocity
+it draws. The
+velocity keeps its meaning when an optimizer changes the column
+diameter; the capacity is then computed from it.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>volumetric_flow</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pump capacity at suction conditions, m3/h.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>velocity</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Interstitial velocity at the column end, m/s (instead of
+<code>volumetric_flow</code>).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>discharge_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pressure the gas is delivered to, bar.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.01325</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>efficiency</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Efficiency = Union[float, Callable[[float], float]]
+
+  
+      module-attribute
+   (swingpy.boundaries.Efficiency)" href="#swingpy.boundaries.Efficiency">Efficiency</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pump efficiency, a number or a function of the suction
+pressure such as <code>falling_vacuum_efficiency</code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.72</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Stream label.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;waste&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>record_as</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name under which the pumped stream is recorded.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.boundaries.VacuumPump.interstitial_velocity" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">interstitial_velocity</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></code>
+
+<a href="#swingpy.boundaries.VacuumPump.interstitial_velocity" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Velocity drawn at the column end, m/s.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.boundaries.VacuumPump.capacity" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">capacity</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></code>
+
+<a href="#swingpy.boundaries.VacuumPump.capacity" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Pump capacity at suction conditions, m3/h.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.FlowInlet" class="doc doc-heading">
+            <code>FlowInlet</code>
+
+
+<a href="#swingpy.boundaries.FlowInlet" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>Gas entering at a fixed molar flow, as set by a mass flow controller.</p>
+<p>The velocity follows from the flow and the face pressure; composition
+and temperature from the Danckwerts conditions. With <code>max_pressure</code> the
+face cannot rise above the supply pressure: once the flow would need a
+higher face pressure, the face is held there and the flow follows from
+the pressure drop (a pressurization that stops at the supply pressure).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>molar_flow</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>mol/s (use <code>standard_litres_per_minute</code> for flows in L/min STP).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Mole fractions of the entering gas, or the name of a
+recorded stream whose mean composition enters.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>default_composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Composition used while that record does not exist yet.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>temperature</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>K.</p>
+              </div>
+            </td>
+            <td>
+                  <code>298.15</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Supply pressure, bar, or None for no limit.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>supply_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pressure of the supply, bar; a compressor is charged above it.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>efficiency</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Efficiency = Union[float, Callable[[float], float]]
+
+  
+      module-attribute
+   (swingpy.boundaries.Efficiency)" href="#swingpy.boundaries.Efficiency">Efficiency</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Efficiency of that compressor.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.72</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Stream label.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;feed&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.MixingInlet" class="doc doc-heading">
+            <code>MixingInlet</code>
+
+
+<a href="#swingpy.boundaries.MixingInlet" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>Fresh gas at a fixed molar flow mixed with gas recycled from a well mixed
+tank, for a recycle into the feed: the outlet of an earlier step is
+collected (<code>record_as</code>) and sent back, spread evenly over this step,
+together with the fresh feed.</p>
+<p>The recycled gas enters at <code>temperature</code> like the fresh gas (it is
+cooled to the feed temperature). The fresh moles count as the stream
+<code>stream</code> and the recycled ones as <code>recycle_stream</code>, so that recovery
+is computed on the fresh feed only and the recycle nets out against the
+step it came from (label that outlet with the same <code>recycle_stream</code>).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>molar_flow</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Fresh gas, mol/s.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Mole fractions of the fresh gas.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>buffer</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the record that fills the tank.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>fraction</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Fraction of the recorded moles sent back.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>temperature</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Temperature of the mixture, K.</p>
+              </div>
+            </td>
+            <td>
+                  <code>298.15</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>supply_pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pressure of the supply, bar; a compressor is charged above it.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>efficiency</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Efficiency = Union[float, Callable[[float], float]]
+
+  
+      module-attribute
+   (swingpy.boundaries.Efficiency)" href="#swingpy.boundaries.Efficiency">Efficiency</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Efficiency of that compressor.</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.72</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label of the fresh gas ("feed").</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;feed&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>recycle_stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Label of the recycled gas ("recycle").</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;recycle&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.boundaries.MixingInlet.stream_moles" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">stream_moles</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">moles_in</span><span class="p">,</span> <span class="n">duration</span><span class="p">)</span></code>
+
+<a href="#swingpy.boundaries.MixingInlet.stream_moles" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Moles that entered, split into the fresh feed and the recycle.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.RecordedPressure" class="doc doc-heading">
+            <code>RecordedPressure</code>
+
+
+<a href="#swingpy.boundaries.RecordedPressure" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>A reservoir pressure taken from the face pressure that another step
+recorded (<code>record_as</code>), typically in the previous cycle.</p>
+<p>In a multi-bed plant a bed that equalizes or supplies purge vents into
+another bed, whose pressure changes during the step. A single-column
+simulation records the face pressure of the receiving step and uses it
+as the downstream pressure of the donor step one cycle later; at cyclic
+steady state the two are consistent.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>buffer</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the record.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>default</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pressure in bar before any record exists (first cycle), a
+number or a function of time in s.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.boundaries.Valve" class="doc doc-heading">
+            <code>Valve</code>
+
+
+<a href="#swingpy.boundaries.Valve" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code></p>
+
+
+
+        <p>A linear valve between the column end and a reservoir,</p>
+<div class="highlight"><pre><span></span><code>molar flow = cv * (upstream pressure - downstream pressure),
+</code></pre></div>
+<p>the flow law of the valves of most cycle simulators. The face pressure
+and flow are solved together with the pressure drop over half a cell.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>cv</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Valve coefficient, mol/(s bar).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pressure</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Reservoir pressure in bar: a number, a function of time
+in s, or a <code>RecordedPressure</code> (the pressure of another step).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>direction</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>"out" for gas leaving the column (the reservoir is
+downstream), "in" for gas entering it from the reservoir.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;out&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>composition</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Gas of the reservoir, for "in".</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>temperature</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Temperature of the reservoir gas, K, for "in".</p>
+              </div>
+            </td>
+            <td>
+                  <code>298.15</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>extra_outflow</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A fixed molar flow (mol/s) leaving through the same end
+in addition to the valve flow, for "out" (for example product
+sent to repressurize another bed).</p>
+              </div>
+            </td>
+            <td>
+                  <code>0.0</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>reversible</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Allow flow against <code>direction</code> (the reservoir gas then
+enters, or the column gas leaves). Off by default.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>stream</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Stream label.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>record_as</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name under which the flow is recorded.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="swingpy.boundaries.as_history" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">as_history</span><span class="p">(</span><span class="n">pressure</span><span class="p">)</span></code>
+
+<a href="#swingpy.boundaries.as_history" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Accept a number (constant pressure) or any callable of time.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="swingpy.boundaries.falling_vacuum_efficiency" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">falling_vacuum_efficiency</span><span class="p">(</span><span class="n">pressure_bar</span><span class="p">)</span></code>
+
+<a href="#swingpy.boundaries.falling_vacuum_efficiency" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Vacuum pump efficiency that falls at deep vacuum,
+eta = 15.84 P / (1 + 19.80 P) with P the suction pressure in bar: about
+0.72 at 0.1 bar or more, and much lower below 0.05 bar, as real pumps do.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="swingpy.boundaries.standard_litres_per_minute" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">standard_litres_per_minute</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span></code>
+
+<a href="#swingpy.boundaries.standard_litres_per_minute" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Molar flow in mol/s of a gas flow given in standard litres per minute (0 C, 1 atm).</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="swingpy.steps" class="doc doc-heading">
+            <code>swingpy.steps</code>
+
+
+<a href="#swingpy.steps" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Cycle steps.</p>
+<p>A step is the pair of boundary conditions at the two column ends and a
+duration, with an optional condition that ends it early.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.steps.Step" class="doc doc-heading">
+            <code>Step</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.steps.Step" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>One step of a cycle.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.steps.Step.name">name</span></code></td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Display name, for example "adsorption".</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.steps.Step.duration">duration</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Step time, s.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.steps.Step.feed_end">feed_end</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Boundary condition at Z = 0.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.steps.Step.product_end">product_end</span></code></td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="Boundary (swingpy.boundaries.Boundary)" href="#swingpy.boundaries.Boundary">Boundary</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Boundary condition at Z = 1.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.steps.Step.stop">stop</span></code></td>
+            <td>
+                  <code><span title="object">object</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional condition that ends the step early, such as
+<code>PressureReached</code>; <code>duration</code> is then the longest it may last.
+A step whose condition already holds at its start is skipped.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="swingpy.steps.Step.direction" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">direction</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#swingpy.steps.Step.direction" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>+1 when the gas flows from the feed end towards the product end,
+-1 for the opposite direction. Used to pick the upwind side of the
+face reconstruction. A step with both ends closed counts as +1.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="swingpy.steps.PressureReached" class="doc doc-heading">
+            <code>PressureReached</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#swingpy.steps.PressureReached" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Ends a step when the pressure at a location reaches a target.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.steps.PressureReached.pressure">pressure</span></code></td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Target, bar.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.steps.PressureReached.location">location</span></code></td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>"feed" (first cell), "product" (last cell) or "mean".</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="swingpy.steps.PressureReached.rising">rising</span></code></td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>True when the pressure rises to the target (pressurization),
+False when it falls to it (blowdown, evacuation).</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="swingpy.steps.PressureReached.value" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">value</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span></code>
+
+<a href="#swingpy.steps.PressureReached.value" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Zero at the target, positive once it is reached.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Mohammad Yazdani · MIT License
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
